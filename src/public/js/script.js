@@ -42,15 +42,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // ===============================
-        // WE ARE VALORANT (right image)
-        // ===============================
-        const weAreImage = document.querySelector(".diagonal-dark-section .img-placeholder");
-
-        if (weAreImage && agents.length > 2) {
-            weAreImage.style.background = `url(${agents[2].fullPortrait}) center/cover no-repeat`;
-        }
-
-        // ===============================
         // YOUR AGENTS (2 tilted cards)
         // ===============================
         const agentCards = document.querySelectorAll(".agent-card");
