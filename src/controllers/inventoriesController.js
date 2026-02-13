@@ -56,9 +56,13 @@ async function resolveSkinIdForWeapon(weaponId) {
   return insertResult.insertId;
 }
 
-async function getMyInventory(req, res, next) {
+async function getInventoryByUserId(req, res, next) {
   try {
-    const userId = req.session.user.id;
+    const userId = Number(req.params.userId);
+    if (!Number.isInteger(userId) || userId <= 0) {
+      return res.status(400).json({ message: "userId invalido." });
+    }
+
     const [rows] = await pool.query(
       `SELECT
           i.id AS inventory_id,
@@ -231,7 +235,7 @@ async function removeWeaponFromInventory(req, res, next) {
 }
 
 module.exports = {
-  getMyInventory,
+  getInventoryByUserId,
   getAllInventories,
   addWeaponToInventory,
   removeWeaponFromInventory,
