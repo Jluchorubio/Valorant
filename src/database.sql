@@ -17,7 +17,7 @@ CREATE TABLE roles (
 -- =========================
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,5
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role_id INT NOT NULL,
@@ -92,12 +92,3 @@ INSERT INTO users (username, email, password, role_id) VALUES
 ('jake', 'jake@valorant.com', 'valorant123', 2),
 ('maria', 'maria@valorant.com', 'valorant123', 2),
 ('carlos', 'carlos@valorant.com', 'valorant123', 2);
-
--- =========================
--- CREAR INVENTARIOS PARA CADA USUARIO
--- =========================
-INSERT INTO inventories (user_id) VALUES
-(1),
-(2),
-(3),
-(4);

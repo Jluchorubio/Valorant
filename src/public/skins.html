@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRUD Skins</title>
+</head>
+<body>
+  <h1>Skins</h1>
+  <p>
+    Weapon se carga desde la API de Valorant. Al cambiar weapon, el catalogo de skins se filtra por esa arma.
+  </p>
+
+  <h2>Guardar skin</h2>
+  <form id="createSkinForm">
+    <label>Weapon:
+      <select id="create_weapon_api_id" required></select>
+    </label><br />
+    <label>Usuario (inventario destino):
+      <select id="create_user_id" required></select>
+    </label><br />
+    <label>Cantidad:
+      <input type="number" id="create_quantity" min="1" value="1" required />
+    </label><br />
+    <label>Buscar skin:
+      <input type="text" id="catalog_search" placeholder="Ej: Prime, Reaver" />
+    </label>
+    <button type="button" id="searchCatalogBtn">Buscar</button><br />
+    <label>Skin:
+      <select id="create_api_skin_id" required></select>
+    </label><br />
+    <img id="catalogPreview" alt="Vista previa skin" width="240" /><br />
+    <button type="submit">Guardar</button>
+  </form>
+
+  <hr />
+
+  <h2>Editar skin (tabla skins)</h2>
+  <form id="updateSkinForm">
+    <label>ID Skin en BD:
+      <input type="number" id="update_skin_id" required min="1" />
+    </label>
+    <button type="button" id="previewUpdateSkinBtn">Ver skin por ID</button><br />
+    <div id="updateSkinInfo"></div>
+    <img id="updateSkinPreview" alt="Vista previa skin actual" width="240" /><br />
+    <label>Nuevo Weapon (opcional):
+      <select id="update_weapon_api_id"></select>
+    </label><br />
+    <label>Nuevo API Skin ID (opcional):
+      <input type="text" id="update_api_skin_id" />
+    </label><br />
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <hr />
+
+  <h2>Eliminar skin (tabla skins)</h2>
+  <form id="deleteSkinForm">
+    <label>ID Skin en BD:
+      <input type="number" id="delete_skin_id" required min="1" />
+    </label>
+    <button type="button" id="previewDeleteSkinBtn">Ver skin por ID</button><br />
+    <div id="deleteSkinInfo"></div>
+    <img id="deleteSkinPreview" alt="Vista previa skin a eliminar" width="240" /><br />
+    <button type="submit">Eliminar</button>
+  </form>
+
+  <hr />
+
+  <h2>CRUD de inventario por usuario</h2>
+  <form id="inventoryAddForm">
+    <h3>Agregar skin al inventario de usuario</h3>
+    <label>Usuario:
+      <select id="inventory_user_id"></select>
+    </label><br />
+    <label>Skin existente:
+      <select id="inventory_add_skin_id"></select>
+    </label><br />
+    <label>Cantidad:
+      <input type="number" id="inventory_add_quantity" min="1" value="1" />
+    </label><br />
+    <button type="submit">Agregar al inventario</button>
+  </form>
+
+  <form id="inventoryUpdateForm">
+    <h3>Editar skin del inventario de usuario</h3>
+    <label>Usuario:
+      <select id="inventory_update_user_id"></select>
+    </label><br />
+    <label>Item actual del inventario:
+      <select id="inventory_item_id"></select>
+    </label><br />
+    <label>Nueva skin (opcional):
+      <select id="inventory_update_skin_id"></select>
+    </label><br />
+    <label>Nueva cantidad (opcional):
+      <input type="number" id="inventory_update_quantity" min="1" />
+    </label><br />
+    <button type="submit">Actualizar inventario</button>
+  </form>
+
+  <form id="inventoryDeleteForm">
+    <h3>Eliminar skin del inventario de usuario</h3>
+    <label>Usuario:
+      <select id="inventory_delete_user_id"></select>
+    </label><br />
+    <label>Item del inventario:
+      <select id="inventory_delete_item_id"></select>
+    </label><br />
+    <button type="submit">Eliminar del inventario</button>
+  </form>
+
+  <div id="inventoryPreview"></div>
+
+  <hr />
+
+  <h2>Skins guardadas (tabla skins)</h2>
+  <button id="refreshSkins">Recargar</button>
+  <pre id="skinsOutput"></pre>
+
+  <script>
+    const createWeaponSelect = document.getElementById("create_weapon_api_id");
+    const createUserSelect = document.getElementById("create_user_id");
+    const updateWeaponSelect = document.getElementById("update_weapon_api_id");
+    const catalogSelect = document.getElementById("create_api_skin_id");
+    const catalogPreview = document.getElementById("catalogPreview");
+    const skinsOutput = document.getElementById("skinsOutput");
+    const updateSkinInfo = document.getElementById("updateSkinInfo");
+    const updateSkinPreview = document.getElementById("updateSkinPreview");
+    const deleteSkinInfo = document.getElementById("deleteSkinInfo");
+    const deleteSkinPreview = document.getElementById("deleteSkinPreview");
+    const inventoryPreview = document.getElementById("inventoryPreview");
+
+    const inventoryUserAdd = document.getElementById("inventory_user_id");
+    const inventoryUserUpdate = document.getElementById("inventory_update_user_id");
+    const inventoryUserDelete = document.getElementById("inventory_delete_user_id");
+    const inventoryAddSkinSelect = document.getElementById("inventory_add_skin_id");
+    const inventoryUpdateSkinSelect = document.getElementById("inventory_update_skin_id");
+    const inventoryItemSelect = document.getElementById("inventory_item_id");
+    const inventoryDeleteItemSelect = document.getElementById("inventory_delete_item_id");
+
+    function setImage(imgElement, url) {
+      if (url) {
+        imgElement.src = url;
+        imgElement.style.display = "inline";
+      } else {
+        imgElement.removeAttribute("src");
+        imgElement.style.display = "none";
+      }
+    }
+
+    async function apiRequest(url, options = {}) {
+      const response = await fetch(url, {
+        headers: { "Content-Type": "application/json" },
+        ...options,
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "Error en la solicitud");
+      return data;
+    }
+
+    function renderWeaponOption(weapon) {
+      const option = document.createElement("option");
+      option.value = weapon.api_id;
+      option.textContent = weapon.name;
+      return option;
+    }
+
+    function renderUserOption(user) {
+      const option = document.createElement("option");
+      option.value = String(user.id);
+      option.textContent = `${user.id} - ${user.username} (${user.email})`;
+      return option;
+    }
+
+    function renderSkinOption(skin) {
+      const option = document.createElement("option");
+      option.value = String(skin.id);
+      option.textContent = `${skin.id} - ${skin.name}`;
+      return option;
+    }
+
+    async function loadWeaponsCatalog() {
+      const weapons = await apiRequest("/api/weapons/catalog");
+      createWeaponSelect.innerHTML = "";
+      updateWeaponSelect.innerHTML = "";
+
+      const updateEmpty = document.createElement("option");
+      updateEmpty.value = "";
+      updateEmpty.textContent = "No cambiar weapon";
+      updateWeaponSelect.appendChild(updateEmpty);
+
+      weapons.forEach((weapon) => {
+        createWeaponSelect.appendChild(renderWeaponOption(weapon));
+        updateWeaponSelect.appendChild(renderWeaponOption(weapon));
+      });
+    }
+
+    async function loadUsersCatalog() {
+      const users = await apiRequest("/api/users");
+      const userSelects = [createUserSelect, inventoryUserAdd, inventoryUserUpdate, inventoryUserDelete];
+      userSelects.forEach((select) => {
+        select.innerHTML = "";
+        users.forEach((user) => select.appendChild(renderUserOption(user)));
+      });
+    }
+
+    async function loadExistingSkinsForInventorySelectors() {
+      const skins = await apiRequest("/api/skins");
+      inventoryAddSkinSelect.innerHTML = "";
+      inventoryUpdateSkinSelect.innerHTML = "";
+
+      const emptyUpdate = document.createElement("option");
+      emptyUpdate.value = "";
+      emptyUpdate.textContent = "No cambiar skin";
+      inventoryUpdateSkinSelect.appendChild(emptyUpdate);
+
+      skins.forEach((skin) => {
+        inventoryAddSkinSelect.appendChild(renderSkinOption(skin));
+        inventoryUpdateSkinSelect.appendChild(renderSkinOption(skin));
+      });
+    }
+
+    async function loadSkinsForSelectedWeapon(search = "") {
+      const weaponApiId = createWeaponSelect.value;
+      if (!weaponApiId) {
+        catalogSelect.innerHTML = "";
+        setImage(catalogPreview, "");
+        return;
+      }
+
+      const query = new URLSearchParams({ weapon_api_id: weaponApiId });
+      if (search) query.set("search", search);
+
+      const skins = await apiRequest(`/api/skins/catalog?${query.toString()}`);
+      catalogSelect.innerHTML = "";
+
+      skins.forEach((skin) => {
+        const option = document.createElement("option");
+        option.value = skin.api_skin_id;
+        option.textContent = skin.name;
+        option.dataset.image = skin.image || "";
+        catalogSelect.appendChild(option);
+      });
+
+      if (skins.length) setImage(catalogPreview, skins[0].image || "");
+      else setImage(catalogPreview, "");
+    }
+
+    async function loadInventoryItemsByUser(userId) {
+      const data = await apiRequest(`/api/inventories/user/${userId}`);
+      inventoryItemSelect.innerHTML = "";
+      inventoryDeleteItemSelect.innerHTML = "";
+
+      data.weapons.forEach((item) => {
+        const text = `${item.inventory_weapon_id} - ${item.name} / ${item.skin_name || "N/A"} / x${item.quantity}`;
+        const optA = document.createElement("option");
+        optA.value = String(item.inventory_weapon_id);
+        optA.textContent = text;
+        inventoryItemSelect.appendChild(optA);
+
+        const optB = document.createElement("option");
+        optB.value = String(item.inventory_weapon_id);
+        optB.textContent = text;
+        inventoryDeleteItemSelect.appendChild(optB);
+      });
+
+      inventoryPreview.textContent = JSON.stringify(data, null, 2);
+    }
+
+    createWeaponSelect.addEventListener("change", async () => {
+      try {
+        document.getElementById("catalog_search").value = "";
+        await loadSkinsForSelectedWeapon("");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    catalogSelect.addEventListener("change", () => {
+      const selected = catalogSelect.options[catalogSelect.selectedIndex];
+      setImage(catalogPreview, selected ? selected.dataset.image : "");
+    });
+
+    inventoryUserUpdate.addEventListener("change", async () => {
+      try {
+        if (inventoryUserUpdate.value) await loadInventoryItemsByUser(inventoryUserUpdate.value);
+      } catch (error) {
+        inventoryPreview.textContent = error.message;
+      }
+    });
+
+    inventoryUserDelete.addEventListener("change", async () => {
+      try {
+        if (inventoryUserDelete.value) await loadInventoryItemsByUser(inventoryUserDelete.value);
+      } catch (error) {
+        inventoryPreview.textContent = error.message;
+      }
+    });
+
+    document.getElementById("searchCatalogBtn").addEventListener("click", async () => {
+      try {
+        const search = document.getElementById("catalog_search").value.trim();
+        await loadSkinsForSelectedWeapon(search);
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    async function previewSkinById(id, infoEl, imgEl) {
+      try {
+        const skin = await apiRequest(`/api/skins/${id}`);
+        infoEl.textContent = `ID: ${skin.id} | Weapon ID: ${skin.weapon_id} | ${skin.name}`;
+        setImage(imgEl, skin.image);
+      } catch (error) {
+        infoEl.textContent = error.message;
+        setImage(imgEl, "");
+      }
+    }
+
+    async function loadSkins() {
+      try {
+        const skins = await apiRequest("/api/skins");
+        skinsOutput.textContent = JSON.stringify(skins, null, 2);
+      } catch (error) {
+        skinsOutput.textContent = error.message;
+      }
+    }
+
+    document.getElementById("createSkinForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        if (!createUserSelect.value) {
+          alert("No hay usuarios disponibles para guardar inventario.");
+          return;
+        }
+        await apiRequest("/api/skins", {
+          method: "POST",
+          body: JSON.stringify({
+            weapon_api_id: createWeaponSelect.value,
+            api_skin_id: catalogSelect.value,
+            user_id: Number(createUserSelect.value),
+            quantity: Number(document.getElementById("create_quantity").value),
+          }),
+        });
+        await loadSkins();
+        await loadExistingSkinsForInventorySelectors();
+        alert("Skin guardada en inventario.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("updateSkinForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = Number(document.getElementById("update_skin_id").value);
+      const payload = {};
+      const weaponApiId = updateWeaponSelect.value;
+      const apiSkinId = document.getElementById("update_api_skin_id").value.trim();
+
+      if (weaponApiId) payload.weapon_api_id = weaponApiId;
+      if (apiSkinId) payload.api_skin_id = apiSkinId;
+
+      if (!Object.keys(payload).length) {
+        alert("Debes enviar al menos un campo para actualizar.");
+        return;
+      }
+
+      try {
+        await apiRequest(`/api/skins/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+        await previewSkinById(id, updateSkinInfo, updateSkinPreview);
+        await loadSkins();
+        await loadExistingSkinsForInventorySelectors();
+        alert("Skin actualizada.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("deleteSkinForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = Number(document.getElementById("delete_skin_id").value);
+      try {
+        await apiRequest(`/api/skins/${id}`, { method: "DELETE" });
+        deleteSkinInfo.textContent = "";
+        setImage(deleteSkinPreview, "");
+        await loadSkins();
+        await loadExistingSkinsForInventorySelectors();
+        alert("Skin eliminada.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("previewUpdateSkinBtn").addEventListener("click", async () => {
+      const id = Number(document.getElementById("update_skin_id").value);
+      if (!id) return alert("Ingresa un ID valido.");
+      await previewSkinById(id, updateSkinInfo, updateSkinPreview);
+    });
+
+    document.getElementById("previewDeleteSkinBtn").addEventListener("click", async () => {
+      const id = Number(document.getElementById("delete_skin_id").value);
+      if (!id) return alert("Ingresa un ID valido.");
+      await previewSkinById(id, deleteSkinInfo, deleteSkinPreview);
+    });
+
+    document.getElementById("inventoryAddForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        await apiRequest(`/api/inventories/user/${inventoryUserAdd.value}/skins`, {
+          method: "POST",
+          body: JSON.stringify({
+            skin_id: Number(inventoryAddSkinSelect.value),
+            quantity: Number(document.getElementById("inventory_add_quantity").value),
+          }),
+        });
+        if (inventoryUserUpdate.value) await loadInventoryItemsByUser(inventoryUserUpdate.value);
+        alert("Skin agregada al inventario del usuario.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("inventoryUpdateForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {};
+      const newSkinId = inventoryUpdateSkinSelect.value;
+      const newQuantity = document.getElementById("inventory_update_quantity").value;
+
+      if (newSkinId) payload.skin_id = Number(newSkinId);
+      if (newQuantity) payload.quantity = Number(newQuantity);
+
+      if (!Object.keys(payload).length) {
+        alert("Debes enviar skin y/o cantidad para actualizar.");
+        return;
+      }
+
+      try {
+        await apiRequest(
+          `/api/inventories/user/${inventoryUserUpdate.value}/skins/${inventoryItemSelect.value}`,
+          { method: "PUT", body: JSON.stringify(payload) }
+        );
+        await loadInventoryItemsByUser(inventoryUserUpdate.value);
+        alert("Inventario actualizado.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("inventoryDeleteForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        await apiRequest(
+          `/api/inventories/user/${inventoryUserDelete.value}/skins/${inventoryDeleteItemSelect.value}`,
+          { method: "DELETE" }
+        );
+        await loadInventoryItemsByUser(inventoryUserDelete.value);
+        alert("Skin eliminada del inventario.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("refreshSkins").addEventListener("click", loadSkins);
+
+    (async function init() {
+      try {
+        setImage(catalogPreview, "");
+        setImage(updateSkinPreview, "");
+        setImage(deleteSkinPreview, "");
+        await loadWeaponsCatalog();
+        await loadUsersCatalog();
+        await loadSkinsForSelectedWeapon("");
+        await loadSkins();
+        await loadExistingSkinsForInventorySelectors();
+        if (inventoryUserUpdate.value) await loadInventoryItemsByUser(inventoryUserUpdate.value);
+      } catch (error) {
+        alert(error.message);
+      }
+    })();
+  </script>
+</body>
+</html>

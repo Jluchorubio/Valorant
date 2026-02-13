@@ -14,6 +14,27 @@ async function getWeaponFromPublicApi(apiId) {
   return weapons.find((item) => item.uuid === apiId || item.displayName === apiId) || null;
 }
 
+async function getPublicWeaponsCatalog(req, res, next) {
+  try {
+    const response = await axios.get(VALORANT_WEAPONS_API, { timeout: 15000 });
+    const weapons = response.data && response.data.data ? response.data.data : [];
+
+    const catalog = weapons
+      .filter((item) => item && item.uuid && item.displayName)
+      .map((item) => ({
+        api_id: item.uuid,
+        name: item.displayName,
+        category: normalizeCategory(item.category),
+        image: item.displayIcon || null,
+        suggested_price: item.shopData && Number.isInteger(item.shopData.cost) ? item.shopData.cost : 0,
+      }));
+
+    return res.status(200).json(catalog);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function getAllWeapons(req, res, next) {
   try {
     const [rows] = await pool.query("SELECT * FROM weapons ORDER BY id ASC");
@@ -147,6 +168,7 @@ async function deleteWeapon(req, res, next) {
 }
 
 module.exports = {
+  getPublicWeaponsCatalog,
   getAllWeapons,
   getWeaponById,
   createWeapon,
