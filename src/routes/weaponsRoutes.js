@@ -1,10 +1,7 @@
 const express = require("express");
 const weaponsController = require("../controllers/weaponsController");
-const { requireAuth, authorizeRoles } = require("../config/authMiddleware");
 
 const router = express.Router();
-
-router.use(requireAuth, authorizeRoles("admin"));
 
 router.get("/", weaponsController.getAllWeapons);
 router.get("/:id", weaponsController.getWeaponById);

@@ -1,10 +1,7 @@
 const express = require("express");
 const usersController = require("../controllers/usersController");
-const { requireAuth, authorizeRoles } = require("../config/authMiddleware");
 
 const router = express.Router();
-
-router.use(requireAuth, authorizeRoles("admin"));
 
 router.get("/", usersController.getAllUsers);
 router.get("/:id", usersController.getUserById);

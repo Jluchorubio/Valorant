@@ -1,5 +1,5 @@
 const express = require("express");
-const authRoutes = require("./authRoutes");
+const path = require("path");
 const usersRoutes = require("./usersRoutes");
 const weaponsRoutes = require("./weaponsRoutes");
 const inventoriesRoutes = require("./inventoriesRoutes");
@@ -7,10 +7,13 @@ const adminRoutes = require("./adminRoutes");
 
 const router = express.Router();
 
-router.use("/auth", authRoutes);
-router.use("/users", usersRoutes);
-router.use("/weapons", weaponsRoutes);
-router.use("/inventories", inventoriesRoutes);
-router.use("/admin", adminRoutes);
+router.get("/", (req, res) => {
+  return res.sendFile(path.join(__dirname, "..", "public", "InicioSesion.html"));
+});
+
+router.use("/api/users", usersRoutes);
+router.use("/api/weapons", weaponsRoutes);
+router.use("/api/inventories", inventoriesRoutes);
+router.use("/api/admin", adminRoutes);
 
 module.exports = router;
