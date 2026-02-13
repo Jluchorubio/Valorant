@@ -1,190 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIOT GAMES · VALORANT (clone)</title>
-    <!-- Tailwind via CDN + basic layer (no purge, full utility) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- custom CSS for diagonals, overlays, animations, advanced clip-paths -->
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIOT GAMES · VALORANT (clone)</title>
+  <!-- Tailwind via CDN + basic layer (no purge, full utility) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- custom CSS for diagonals, overlays, animations, advanced clip-paths -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="text-white antialiased">
 
-    <!-- ========== NAVBAR (dark, with logo, menu, play, icons) ========== -->
-    <nav class="bg-black/90 py-3 px-8 flex items-center justify-between border-b border-[#ff4655]/20 relative z-50">
-        <!-- left: logo + riot valorant -->
-        <div class="flex items-center gap-6">
-            <div class="text-xl font-black tracking-tight text-white">RIOT <span class="text-[#ff4655]">GAME</span></div>
-            <div class="w-px h-6 bg-white/20"></div>
-            <div class="font-black text-2xl tracking-widest text-white/90">VALORANT</div>
+  <!-- ========== NAVBAR (dark, with logo, menu, play, icons) ========== -->
+  <nav class="bg-black/90 py-3 px-8 flex items-center justify-between border-b border-[#ff4655]/20 relative z-50">
+    <!-- left: logo + riot valorant -->
+    <div class="flex items-center gap-6">
+      <div class="text-xl font-black tracking-tight text-white">RIOT <span class="text-[#ff4655]">GAME</span></div>
+      <div class="w-px h-6 bg-white/20"></div>
+      <div class="font-black text-2xl tracking-widest text-white/90">VALORANT</div>
+    </div>
+
+    <!-- menu links -->
+    <div class="hidden lg:flex gap-8 text-sm uppercase tracking-wider">
+      <span class="nav-link">Game</span>
+      <span class="nav-link">Agents</span>
+      <span class="nav-link">Maps</span>
+      <span class="nav-link">News</span>
+      <span class="nav-link">Support</span>
+    </div>
+
+    <!-- right: play button + icons -->
+    <div class="flex items-center gap-5">
+      <span class="btn-red text-sm px-5 py-2">Play Now</span>
+      <span class="material-icons text-xl opacity-70 cursor-default">🔔</span>
+      <span class="material-icons text-xl opacity-70 cursor-default">🌐</span>
+      <span class="w-8 h-8 rounded-full bg-gray-700 block border-2 border-white/30"></span>
+    </div>
+  </nav>
+
+  <!-- ========== HERO SECTION ========== with big background image and diagonal cut -->
+  <section class="relative w-full h-[85vh] diagonal-hero">
+    <!-- background placeholder (image area) -->
+    <div class="absolute inset-0 w-full h-full bg-gray-800"></div> <!-- fallback -->
+    <div class="absolute inset-0 w-full h-full">
+      <div class="img-placeholder w-full h-full"
+        style="background: radial-gradient(ellipse at 20% 40%, #28313e, #0b0d12);"></div>
+    </div>
+    <!-- red overlay + dark gradient (animated) -->
+    <div class="hero-overlay"></div>
+
+    <!-- centered content -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4 fade-up">
+      <h1 class="text-8xl md:text-9xl font-black tracking-[0.2em] text-white drop-shadow-2xl">VALORANT</h1>
+      <p class="text-xl md:text-2xl max-w-2xl mt-4 text-white/80 font-light">DEFY THE LIMITS // 13 YEARS</p>
+      <div class="mt-8">
+        <span class="btn-red text-xl px-10 py-4">PLAY NOW</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LATEST ARTICLES ========== (title, 3 cards) -->
+  <section class="py-24 px-6 md:px-16 bg-[#0b0b0f]">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex justify-between items-end border-b border-white/10 pb-4 mb-12">
+        <h2 class="text-4xl font-black tracking-wide">LATEST ARTICLES</h2>
+        <span class="text-[#ff4655] font-semibold text-sm cursor-default hover:underline">GO TO ARTICLE PAGE →</span>
+      </div>
+
+      <!-- 3 cards grid -->
+      <div class="grid md:grid-cols-3 gap-10">
+        <!-- card 1 -->
+        <div class="article-card fade-up" style="animation-delay: 0.1s;">
+          <div class="w-full h-56 bg-gray-800">
+            <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #19212b, #0e141c);">
+            </div>
+          </div>
+          <div class="mt-5">
+            <p class="text-xs text-gray-400 tracking-wider">10/01/23</p>
+            <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
+            <span
+              class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ
+              MORE →</span>
+          </div>
         </div>
-
-        <!-- menu links -->
-        <div class="hidden lg:flex gap-8 text-sm uppercase tracking-wider">
-            <span class="nav-link">Game</span>
-            <span class="nav-link">Agents</span>
-            <span class="nav-link">Maps</span>
-            <span class="nav-link">News</span>
-            <span class="nav-link">Support</span>
+        <!-- card 2 -->
+        <div class="article-card fade-up" style="animation-delay: 0.2s;">
+          <div class="w-full h-56 bg-gray-800">
+            <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #1a212b, #121723);">
+            </div>
+          </div>
+          <div class="mt-5">
+            <p class="text-xs text-gray-400 tracking-wider">11/01/23</p>
+            <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
+            <span
+              class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ
+              MORE →</span>
+          </div>
         </div>
-
-        <!-- right: play button + icons -->
-        <div class="flex items-center gap-5">
-            <span class="btn-red text-sm px-5 py-2">Play Now</span>
-            <span class="material-icons text-xl opacity-70 cursor-default">🔔</span>
-            <span class="material-icons text-xl opacity-70 cursor-default">🌐</span>
-            <span class="w-8 h-8 rounded-full bg-gray-700 block border-2 border-white/30"></span>
+        <!-- card 3 -->
+        <div class="article-card fade-up" style="animation-delay: 0.3s;">
+          <div class="w-full h-56 bg-gray-800">
+            <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #1b232e, #0f141c);">
+            </div>
+          </div>
+          <div class="mt-5">
+            <p class="text-xs text-gray-400 tracking-wider">12/01/23</p>
+            <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
+            <span
+              class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ
+              MORE →</span>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+  </section>
 
-    <!-- ========== HERO SECTION ========== with big background image and diagonal cut -->
-    <section class="relative w-full h-[85vh] diagonal-hero">
-        <!-- background placeholder (image area) -->
-        <div class="absolute inset-0 w-full h-full bg-gray-800"></div> <!-- fallback -->
-        <div class="absolute inset-0 w-full h-full">
-            <div class="img-placeholder w-full h-full" style="background: radial-gradient(ellipse at 20% 40%, #28313e, #0b0d12);"></div>
+  <!-- ========== ISO / EVOLUTION SECTION ========== with diagonal and big left image -->
+  <section class="diagonal-iso bg-[#120e1a] py-16 px-6 md:px-16">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <!-- left image block (big placeholder) -->
+      <div class="relative">
+        <div class="w-full h-[450px] bg-gray-800 shadow-2xl">
+          <div class="img-placeholder w-full h-full"
+            style="background: radial-gradient(circle at 70% 30%, #292137, #0d0a12);"></div>
         </div>
-        <!-- red overlay + dark gradient (animated) -->
-        <div class="hero-overlay"></div>
+        <!-- superposed element ISO badge -->
+        <div class="iso-badge text-4xl font-black text-white">ISO</div>
+      </div>
+      <!-- right text -->
+      <div class="space-y-6">
+        <span class="text-[#ff4655] text-sm tracking-[0.3em]">EPISODE 07 / ACT III / YR 3</span>
+        <h2 class="text-7xl font-black leading-none">EVOLUTION</h2>
+        <p class="text-3xl font-bold text-white/80">DUE LISTO</p>
+        <p class="text-gray-300 max-w-md text-lg">Based on your play and experience on a global, competitive stage. You
+          have 13 years to explore and defend your niche.</p>
+        <!-- small cta if needed but image shows just text, but keep minimal -->
+      </div>
+    </div>
+  </section>
 
-        <!-- centered content -->
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4 fade-up">
-            <h1 class="text-8xl md:text-9xl font-black tracking-[0.2em] text-white drop-shadow-2xl">VALORANT</h1>
-            <p class="text-xl md:text-2xl max-w-2xl mt-4 text-white/80 font-light">DEFY THE LIMITS // 13 YEARS</p>
-            <div class="mt-8">
-                <span class="btn-red text-xl px-10 py-4">PLAY NOW</span>
-            </div>
+  <!-- ========== WE ARE VALORANT ========== split left text, right image (diagonal optional) -->
+  <section class="relative bg-[#0e0b16] py-20 px-6 md:px-16 diagonal-dark-section">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+      <div class="z-20 space-y-5">
+        <h2 class="text-5xl font-black leading-tight">WE ARE <span class="text-[#ff4655]">VALORANT</span></h2>
+        <p class="text-2xl font-semibold">DEFY THE LIMITS</p>
+        <p class="text-gray-300 text-lg">Based on your play and experience on a global, competitive stage. You have 13
+          years to explore and defend your niche in the ever-evolving landscape of Valorant. With our unique abilities
+          and skillset, you can dominate the competition and become a true legend. Learn more about our game-changing
+          features and how they can help you achieve your goals.</p>
+        <span class="inline-block btn-red mt-4">LEARN MORE</span>
+      </div>
+      <!-- right side image with overlay effect -->
+      <div class="relative h-[450px] w-full">
+        <div class="img-placeholder w-full h-full agent-diag-clip"
+          style="background: radial-gradient(circle at 20% 50%, #323543, #0f0d17);"></div>
+        <!-- angular overlay just for style -->
+        <div class="split-overlay-diag"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== YOUR AGENTS ========== red background, two characters left, text right -->
+  <section class="diagonal-agents bg-[#ff4655] py-20 px-6 md:px-16 overflow-hidden">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10">
+      <!-- left: two character placeholders side by side (with superposed effect) -->
+      <div class="flex flex-1 gap-4 justify-center">
+        <div class="w-40 h-64 md:w-52 md:h-80 bg-black/30 border-4 border-white/20 rotate-[-2deg] transform-gpu">
+          <div class="img-placeholder agent-card w-full h-full"
+            style="background: linear-gradient(145deg, #251f2a, #120e14);"></div>
         </div>
-    </section>
-
-    <!-- ========== LATEST ARTICLES ========== (title, 3 cards) -->
-    <section class="py-24 px-6 md:px-16 bg-[#0b0b0f]">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-end border-b border-white/10 pb-4 mb-12">
-                <h2 class="text-4xl font-black tracking-wide">LATEST ARTICLES</h2>
-                <span class="text-[#ff4655] font-semibold text-sm cursor-default hover:underline">GO TO ARTICLE PAGE →</span>
-            </div>
-
-            <!-- 3 cards grid -->
-            <div class="grid md:grid-cols-3 gap-10">
-                <!-- card 1 -->
-                <div class="article-card fade-up" style="animation-delay: 0.1s;">
-                    <div class="w-full h-56 bg-gray-800">
-                        <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #19212b, #0e141c);"></div>
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-xs text-gray-400 tracking-wider">10/01/23</p>
-                        <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
-                        <span class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ MORE →</span>
-                    </div>
-                </div>
-                <!-- card 2 -->
-                <div class="article-card fade-up" style="animation-delay: 0.2s;">
-                    <div class="w-full h-56 bg-gray-800">
-                        <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #1a212b, #121723);"></div>
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-xs text-gray-400 tracking-wider">11/01/23</p>
-                        <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
-                        <span class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ MORE →</span>
-                    </div>
-                </div>
-                <!-- card 3 -->
-                <div class="article-card fade-up" style="animation-delay: 0.3s;">
-                    <div class="w-full h-56 bg-gray-800">
-                        <div class="img-placeholder w-full h-full" style="background: linear-gradient(145deg, #1b232e, #0f141c);"></div>
-                    </div>
-                    <div class="mt-5">
-                        <p class="text-xs text-gray-400 tracking-wider">12/01/23</p>
-                        <h3 class="text-2xl font-bold uppercase mt-1">COMMUNITY ROUNDUP: OCTOBER 2023</h3>
-                        <span class="inline-block mt-3 text-[#ff4655] font-semibold text-sm border-b border-[#ff4655] pb-0 cursor-default">READ MORE →</span>
-                    </div>
-                </div>
-            </div>
+        <div class="w-40 h-64 md:w-52 md:h-80 bg-black/30 border-4 border-white/20 rotate-[3deg] translate-y-6">
+          <div class="img-placeholder agent-card w-full h-full"
+            style="background: linear-gradient(145deg, #392d3a, #1b1320);"></div>
         </div>
-    </section>
+      </div>
+      <!-- right text + white button -->
+      <div class="flex-1 text-white space-y-6">
+        <h2 class="text-5xl font-black">YOUR AGENTS</h2>
+        <p class="text-xl font-semibold">CREATIVITY IS YOUR GREATEST WEAPON</p>
+        <p class="text-white/80 max-w-lg">Learn more about our agents and their unique abilities. Each agent has a
+          distinct style and plays a crucial role in the team's success. Discover their strengths and weaknesses and
+          learn how to use them effectively.</p>
+        <span class="inline-block btn-outline-white mt-4">VIEW ALL AGENTS</span>
+      </div>
+    </div>
+  </section>
 
-    <!-- ========== ISO / EVOLUTION SECTION ========== with diagonal and big left image -->
-    <section class="diagonal-iso bg-[#120e1a] py-16 px-6 md:px-16">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <!-- left image block (big placeholder) -->
-            <div class="relative">
-                <div class="w-full h-[450px] bg-gray-800 shadow-2xl">
-                    <div class="img-placeholder w-full h-full" style="background: radial-gradient(circle at 70% 30%, #292137, #0d0a12);"></div>
-                </div>
-                <!-- superposed element ISO badge -->
-                <div class="iso-badge text-4xl font-black text-white">ISO</div>
-            </div>
-            <!-- right text -->
-            <div class="space-y-6">
-                <span class="text-[#ff4655] text-sm tracking-[0.3em]">EPISODE 07 / ACT III / YR 3</span>
-                <h2 class="text-7xl font-black leading-none">EVOLUTION</h2>
-                <p class="text-3xl font-bold text-white/80">DUE LISTO</p>
-                <p class="text-gray-300 max-w-md text-lg">Based on your play and experience on a global, competitive stage. You have 13 years to explore and defend your niche.</p>
-                <!-- small cta if needed but image shows just text, but keep minimal -->
-            </div>
-        </div>
-    </section>
+  <!-- ========== MAP SECTION ========== light background split text left / image right -->
+  <section class="diagonal-map bg-[#f0f2f5] text-black py-20 px-6 md:px-16">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <div class="space-y-5">
+        <h2 class="text-5xl font-black tracking-wide">MAP</h2>
+        <p class="text-2xl font-bold">FIGHT IN ALL PARTS OF THE WORLD</p>
+        <p class="text-gray-700 text-lg">Each map is a battlefield where players can test their skills and strategies.
+          Explore the different areas of the map and discover new ways to win.</p>
+        <span class="inline-block btn-red mt-4 text-black bg-[#ff4655] text-white">VIEW ALL MAPS</span>
+      </div>
+      <div class="w-full h-80 md:h-96 bg-gray-400 shadow-xl">
+        <div class="img-placeholder map-bg w-full h-full"
+          style="background: linear-gradient(145deg, #5f6c7a, #303841);"></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- ========== WE ARE VALORANT ========== split left text, right image (diagonal optional) -->
-    <section class="relative bg-[#0e0b16] py-20 px-6 md:px-16 diagonal-dark-section">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-            <div class="z-20 space-y-5">
-                <h2 class="text-5xl font-black leading-tight">WE ARE <span class="text-[#ff4655]">VALORANT</span></h2>
-                <p class="text-2xl font-semibold">DEFY THE LIMITS</p>
-                <p class="text-gray-300 text-lg">Based on your play and experience on a global, competitive stage. You have 13 years to explore and defend your niche in the ever-evolving landscape of Valorant. With our unique abilities and skillset, you can dominate the competition and become a true legend. Learn more about our game-changing features and how they can help you achieve your goals.</p>
-                <span class="inline-block btn-red mt-4">LEARN MORE</span>
-            </div>
-            <!-- right side image with overlay effect -->
-            <div class="relative h-[450px] w-full">
-                <div class="img-placeholder w-full h-full agent-diag-clip" style="background: radial-gradient(circle at 20% 50%, #323543, #0f0d17);"></div>
-                <!-- angular overlay just for style -->
-                <div class="split-overlay-diag"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== YOUR AGENTS ========== red background, two characters left, text right -->
-    <section class="diagonal-agents bg-[#ff4655] py-20 px-6 md:px-16 overflow-hidden">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10">
-            <!-- left: two character placeholders side by side (with superposed effect) -->
-            <div class="flex flex-1 gap-4 justify-center">
-                <div class="w-40 h-64 md:w-52 md:h-80 bg-black/30 border-4 border-white/20 rotate-[-2deg] transform-gpu">
-                    <div class="img-placeholder agent-card w-full h-full" style="background: linear-gradient(145deg, #251f2a, #120e14);"></div>
-                </div>
-                <div class="w-40 h-64 md:w-52 md:h-80 bg-black/30 border-4 border-white/20 rotate-[3deg] translate-y-6">
-                    <div class="img-placeholder agent-card w-full h-full" style="background: linear-gradient(145deg, #392d3a, #1b1320);"></div>
-                </div>
-            </div>
-            <!-- right text + white button -->
-            <div class="flex-1 text-white space-y-6">
-                <h2 class="text-5xl font-black">YOUR AGENTS</h2>
-                <p class="text-xl font-semibold">CREATIVITY IS YOUR GREATEST WEAPON</p>
-                <p class="text-white/80 max-w-lg">Learn more about our agents and their unique abilities. Each agent has a distinct style and plays a crucial role in the team's success. Discover their strengths and weaknesses and learn how to use them effectively.</p>
-                <span class="inline-block btn-outline-white mt-4">VIEW ALL AGENTS</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== MAP SECTION ========== light background split text left / image right -->
-    <section class="diagonal-map bg-[#f0f2f5] text-black py-20 px-6 md:px-16">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
-            <div class="space-y-5">
-                <h2 class="text-5xl font-black tracking-wide">MAP</h2>
-                <p class="text-2xl font-bold">FIGHT IN ALL PARTS OF THE WORLD</p>
-                <p class="text-gray-700 text-lg">Each map is a battlefield where players can test their skills and strategies. Explore the different areas of the map and discover new ways to win.</p>
-                <span class="inline-block btn-red mt-4 text-black bg-[#ff4655] text-white">VIEW ALL MAPS</span>
-            </div>
-            <div class="w-full h-80 md:h-96 bg-gray-400 shadow-xl">
-                <div class="img-placeholder map-bg w-full h-full" style="background: linear-gradient(145deg, #5f6c7a, #303841);"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- optional footer / spacer (no need deep) just to complete -->
-    <footer class="bg-black py-10 text-center text-white/40 text-sm">
-        <span>RIOT GAMES · VALORANT · unofficial practice clone · all placeholders</span>
-    </footer>
+  <!-- optional footer / spacer (no need deep) just to complete -->
+  <footer class="bg-black py-10 text-center text-white/40 text-sm">
+    <span>RIOT GAMES · VALORANT · unofficial practice clone · all placeholders</span>
+  </footer>
+  <script src="js/script.js"></script>
 </body>
+
 </html>
