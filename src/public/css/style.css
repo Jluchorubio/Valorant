@@ -1,0 +1,639 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0a0a0c;
+            font-family: 'Inter', 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        /* ===== CUSTOM DIAGONAL SECTIONS & ANGULAR OVERLAYS ===== */
+        .diagonal-hero {
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+        }
+        .diagonal-dark-section {
+            position: relative;
+            clip-path: polygon(0 0, 100% 5%, 100% 95%, 0% 100%);
+            margin-top: -2px; /* seamless overlap */
+            z-index: 5;
+        }
+        .diagonal-iso {
+            clip-path: polygon(0 0, 100% 8%, 100% 92%, 0% 100%);
+            margin-top: -2px;
+            margin-bottom: -2px;
+            position: relative;
+            z-index: 10;
+        }
+        .diagonal-agents {
+            clip-path: polygon(0 8%, 100% 0, 100% 92%, 0% 100%);
+            margin-top: -2px;
+            margin-bottom: -2px;
+            position: relative;
+        }
+        .diagonal-map {
+            clip-path: polygon(0 0, 100% 8%, 100% 100%, 0 92%);
+            margin-top: -6px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* overlay image darken + animated gradient */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(25,5,15,0.7) 70%, rgba(255,70,85,0.15) 100%);
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            animation: slowFadeIn 1.8s ease-out;
+        }
+
+        /* image placeholders only – no real images */
+        .img-placeholder {
+            background: linear-gradient(145deg, #1e1e2a 0%, #2d2d3a 100%);
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+            border-radius: inherit;
+        }
+        .img-placeholder.agent-card {
+            background: linear-gradient(145deg, #2a1e2a, #1a1020);
+        }
+        .img-placeholder.map-bg {
+            background: radial-gradient(circle at 30% 50%, #2f3e4e, #14181c);
+        }
+
+        /* buttons – solid red with gaming style */
+        .btn-red {
+            background-color: #ff4655;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 2rem;
+            border: none;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 0 0 rgba(255,70,85,0.4);
+            cursor: default; /* static replica */
+        }
+        .btn-red:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 10px 20px -5px #ff4655;
+            background-color: #ff2c3b;
+        }
+
+        .btn-outline-white {
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            font-weight: 700;
+            padding: 0.7rem 2.2rem;
+            transition: 0.2s;
+            cursor: default;
+        }
+        .btn-outline-white:hover {
+            background: white;
+            color: #0a0a0c;
+            transform: scale(1.02);
+        }
+
+        /* cards hover translateY + fade */
+        .article-card {
+            transition: all 0.35s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+        }
+
+        /* fade-in keyframes */
+        @keyframes softFadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slowFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .fade-up {
+            animation: softFadeUp 0.9s forwards;
+        }
+
+        .section-fade {
+            opacity: 0; /* will be animated by scroll? but we set visible via class, just default visible */
+        }
+
+        /* default visible & staggered children */
+        .fade-in-child {
+            animation: softFadeUp 0.9s forwards;
+        }
+
+        /* navbar specific */
+        .nav-link {
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            transition: color 0.1s;
+            cursor: default;
+        }
+        .nav-link:hover {
+            color: #ff4655;
+        }
+
+        /* iso split overlay elements (superposition) */
+        .iso-badge {
+            position: absolute;
+            bottom: 12%;
+            right: 5%;
+            background: #ff4655;
+            padding: 0.5rem 1.5rem;
+            transform: skewX(-10deg) rotate(-1deg);
+            box-shadow: 10px 10px 0 #000;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        /* angular overlay for we are valorant */
+        .split-overlay-diag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #0c0c14 20%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* ensure all texts match bold gaming look */
+        h1, h2, h3, .super-headline {
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* little extra diagonal on agent image side */
+        .agent-diag-clip {
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+        }
+
+                .material-icons {
+            font-family: 'Arial', sans-serif;
+            font-weight: 400;
+        }
+        .cursor-default {
+            cursor: default;
+        }
+
+/* ========== 1. HERO SECTION – CINEMATIC LAYER ========= */
+
+/* Efecto parallax falso + movimiento gradient overlay */
+.diagonal-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,70,85,0.08) 0%, transparent 50%),
+                linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.02) 50%, transparent 70%);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    pointer-events: none;
+    z-index: 5;
+    animation: heroLightMove 12s ease-in-out infinite alternate, heroParallax 20s linear infinite;
+    mix-blend-mode: overlay;
+}
+
+@keyframes heroLightMove {
+    0% { background-position: 0% 0%; opacity: 0.4; }
+    50% { opacity: 0.7; }
+    100% { background-position: 100% 100%; opacity: 0.4; }
+}
+
+@keyframes heroParallax {
+    0% { transform: scale(1) translateX(0); }
+    50% { transform: scale(1.02) translateX(-0.5%); }
+    100% { transform: scale(1) translateX(0); }
+}
+
+/* Glow suave en botón principal */
+.diagonal-hero .btn-red {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.diagonal-hero .btn-red::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s;
+    pointer-events: none;
+}
+
+.diagonal-hero .btn-red:hover::after {
+    opacity: 0.6;
+    animation: glowPulse 2s infinite;
+}
+
+@keyframes glowPulse {
+    0% { transform: scale(0.95); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(0.95); opacity: 0.4; }
+}
+
+/* Entrada escalonada del título y subtítulo (stagger) */
+.diagonal-hero h1 {
+    animation: titleStaggerIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0; /* partida oculta, pero respeta el fade-up original – ambos coexisten */
+}
+
+.diagonal-hero p {
+    animation: titleStaggerIn 1.2s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+.diagonal-hero .btn-red {
+    animation: titleStaggerIn 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes titleStaggerIn {
+    0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ========== 2. NAVBAR – INTERACTIVE MICRO-FLOW ========= */
+
+/* Línea animada inferior en hover (underline expand) */
+.nav-link {
+    position: relative;
+    cursor: default;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ff4655;
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Slide sutil en links al hover */
+.nav-link:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+/* Brillo en botón Play Now */
+nav .btn-red {
+    position: relative;
+    overflow: hidden;
+}
+
+nav .btn-red::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+}
+
+nav .btn-red:hover::before {
+    left: 125%;
+}
+
+/* ========== 3. ARTICLES CARDS – SHINE + OVERLAY + ZOOM ========= */
+
+.article-card {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Overlay oscuro que aparece suavemente */
+.article-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.article-card:hover::after {
+    opacity: 0.6;
+}
+
+/* Efecto shine al pasar el mouse */
+.article-card .img-placeholder {
+    position: relative;
+    overflow: hidden;
+}
+
+.article-card .img-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.article-card:hover .img-placeholder::before {
+    left: 150%;
+}
+
+/* Escala sutil de imagen interna (sin romper layout) */
+.article-card .img-placeholder {
+    transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.article-card:hover .img-placeholder {
+    transform: scale(1.03);
+}
+
+/* ========== 4. ISO SECTION – FLOATING BADGE + PULSE GLOW + LIGHT SWEEP ========= */
+
+.iso-badge {
+    animation: floatBadge 4s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+}
+
+@keyframes floatBadge {
+    0% { transform: skewX(-10deg) rotate(-1deg) translateY(0); }
+    50% { transform: skewX(-10deg) rotate(-1deg) translateY(-8px) translateX(4px); }
+    100% { transform: skewX(-10deg) rotate(-1deg) translateY(0); }
+}
+
+/* Glow rojo pulsante suave */
+.iso-badge {
+    box-shadow: 0 0 10px rgba(255,70,85,0.2);
+    animation: pulseGlow 3s infinite alternate, floatBadge 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px rgba(255,70,85,0.3), 0 0 15px rgba(255,70,85,0.1); }
+    100% { box-shadow: 0 0 20px rgba(255,70,85,0.7), 0 0 30px rgba(255,70,85,0.3); }
+}
+
+/* Luz horizontal muy tenue que se mueve en el fondo de la sección ISO */
+.diagonal-iso {
+    position: relative;
+    overflow: hidden;
+}
+
+.diagonal-iso::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,70,85,0.02) 30%, rgba(255,70,85,0.05) 50%, transparent 70%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    pointer-events: none;
+    animation: lightSweep 12s linear infinite;
+    z-index: 20;
+}
+
+@keyframes lightSweep {
+    0% { background-position: 100% 0; opacity: 0.1; }
+    50% { opacity: 0.3; }
+    100% { background-position: -100% 0; opacity: 0.1; }
+}
+
+/* ========== 5. AGENTS SECTION – FLOATING CHARACTERS + DIAGONAL LIGHT + 3D HOVER ========= */
+
+/* Movimiento flotante en los dos personajes */
+.diagonal-agents .flex-1 .w-40 {
+    animation: floatAgent 5s ease-in-out infinite;
+}
+
+.diagonal-agents .flex-1 .w-40:first-child {
+    animation-delay: 0s;
+}
+
+.diagonal-agents .flex-1 .w-40:last-child {
+    animation-delay: 1.5s;
+}
+
+@keyframes floatAgent {
+    0% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(-2deg) translateY(-12px); }
+    100% { transform: rotate(-2deg) translateY(0); }
+}
+
+/* Ajuste para el segundo personaje que ya tiene rotate */
+.diagonal-agents .flex-1 .w-40:last-child {
+    animation: floatAgentSecond 5s ease-in-out infinite 1.5s;
+}
+
+@keyframes floatAgentSecond {
+    0% { transform: rotate(3deg) translateY(24px); }
+    50% { transform: rotate(3deg) translateY(12px); }
+    100% { transform: rotate(3deg) translateY(24px); }
+}
+
+/* Animación diagonal que se desliza suavemente en background (muy sutil) */
+.diagonal-agents {
+    position: relative;
+    overflow: hidden;
+}
+
+.diagonal-agents::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.02) 40%, transparent 50%);
+    animation: diagonalShift 15s linear infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes diagonalShift {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    100% { transform: translateX(10%) translateY(10%) rotate(5deg); }
+}
+
+/* Hover con leve rotación 3D en cards de agentes */
+.diagonal-agents .flex-1 .w-40 {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s;
+    will-change: transform;
+}
+
+.diagonal-agents .flex-1 .w-40:hover {
+    transform: rotate(0deg) scale(1.02) perspective(500px) rotateY(2deg) rotateX(1deg);
+    box-shadow: 0 20px 30px -10px rgba(255,70,85,0.4);
+    z-index: 30;
+    transition: transform 0.3s;
+}
+
+/* ========== 6. MAP SECTION – ZOOM SUTIL + CLIP-PATH REVEAL + BOTÓN MICRO ========= */
+
+.map-bg {
+    transition: transform 8s cubic-bezier(0.1, 0.7, 0.3, 1);
+    transform-origin: center;
+}
+
+.diagonal-map:hover .map-bg {
+    transform: scale(1.03);
+}
+
+/* Efecto reveal horizontal con clip-path animado (al entrar en viewport, pero solo hover en sección) */
+.diagonal-map .grid {
+    position: relative;
+}
+
+.diagonal-map .grid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0b0b0f;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    pointer-events: none;
+    transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.diagonal-map:hover .grid::after {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%); /* permanece oculto, solo idea, pero mejor usamos otro efecto */
+}
+/* mejor efecto: un barrido muy sutil en hover en la imagen */
+.diagonal-map .img-placeholder {
+    position: relative;
+    overflow: hidden;
+}
+
+.diagonal-map .img-placeholder::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,70,85,0.1), transparent);
+    transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    pointer-events: none;
+}
+
+.diagonal-map:hover .img-placeholder::after {
+    left: 200%;
+}
+
+/* Micro animación en botón */
+.diagonal-map .btn-red {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.diagonal-map .btn-red:hover {
+    transform: scale(1.05) translateX(4px);
+    letter-spacing: 0.1em;
+}
+
+/* ========== 7. GLOBALES – SCROLL REVEAL (SÓLO CSS) + NOISE + SCANLINE ========= */
+
+/* Scroll reveal con opacidad basada en viewport (no depende de JS) */
+@keyframes revealOnScroll {
+    0% { opacity: 0.3; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Se aplica a todas las secciones principales con un pequeño retraso */
+section {
+    animation: revealOnScroll 1s ease-out forwards;
+    opacity: 0; /* se fuerza a que arranquen ocultas, pero como ya tienen fade-up, se combina sin romper */
+    animation-timeline: view();  /* ⚠️ SOLO NAVIGATORS RECIENTES (fallback a none) */
+    animation-range: entry 0% entry 90%;
+}
+
+/* Fallback para navegadores que no soportan animation-timeline: igual se ven bien */
+@supports not (animation-timeline: view()) {
+    section {
+        opacity: 1;
+        animation: none;
+    }
+}
+
+/* Efecto grain / noise muy sutil en toda la página (estilo gaming) */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+    background-repeat: repeat;
+    opacity: 0.015;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: overlay;
+    animation: grainShift 8s steps(4) infinite;
+}
+
+@keyframes grainShift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, -2%); }
+    50% { transform: translate(2%, 1%); }
+    75% { transform: translate(-1%, 2%); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Línea scanline sutil (estilo monitor antiguo gaming) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.02) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.2;
+    animation: scanMove 10s linear infinite;
+}
+
+@keyframes scanMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 20px; }
+}
+
+/* Cubic-bezier personalizados para transiciones globales más fluidas */
+a, button, .btn-red, .btn-outline-white, .article-card, .img-placeholder, .nav-link {
+    transition-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.2) !important;
+}
+
