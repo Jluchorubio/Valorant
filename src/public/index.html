@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CRUD Productos</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    button { margin: 2px; }
+    input { margin: 5px; }
+  </style>
+</head>
+<body>
+
+  <h1>Gestión de Productos</h1>
+
+  <h2>Crear / Editar Producto</h2>
+  <form id="formProducto">
+    <input type="hidden" id="id">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="number" id="precio" placeholder="Precio" required>
+    <button type="submit">Guardar</button>
+  </form>
+
+  <h2>Lista de Productos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tablaProductos"></tbody>
+  </table>
+
+<script>
+const API = '/api/productos';
+
+function cargarProductos() {
+  fetch(API)
+    .then(res => res.json())
+    .then(data => {
+      const tabla = document.getElementById('tablaProductos');
+      tabla.innerHTML = '';
+
+      data.forEach(prod => {
+        tabla.innerHTML += `
+          <tr>
+            <td>${prod.id}</td>
+            <td>${prod.nombre}</td>
+            <td>$${prod.precio}</td>
+            <td>
+              <button onclick="editarProducto(${prod.id}, '${prod.nombre}', ${prod.precio})">Editar</button>
+              <button onclick="eliminarProducto(${prod.id})">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      });
+    });
+}
+
+function eliminarProducto(id) {
+  fetch(`${API}/${id}`, {
+    method: 'DELETE'
+  })
+  .then(() => cargarProductos());
+}
+
+function editarProducto(id, nombre, precio) {
+  document.getElementById('id').value = id;
+  document.getElementById('nombre').value = nombre;
+  document.getElementById('precio').value = precio;
+}
+
+document.getElementById('formProducto').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const id = document.getElementById('id').value;
+  const nombre = document.getElementById('nombre').value;
+  const precio = document.getElementById('precio').value;
+
+  if (id) {
+    // UPDATE
+    fetch(`${API}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, precio })
+    })
+    .then(() => {
+      this.reset();
+      cargarProductos();
+    });
+  } else {
+    // CREATE
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, precio })
+    })
+    .then(() => {
+      this.reset();
+      cargarProductos();
+    });
+  }
+});
+
+cargarProductos();
+</script>
+
+</body>
+</html>
