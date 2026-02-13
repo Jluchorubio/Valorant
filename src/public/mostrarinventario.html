@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mostrar Inventario</title>
+</head>
+<body>
+  <h1>Inventario por Usuario</h1>
+
+  <label>Selecciona usuario:
+    <select id="userSelect"></select>
+  </label>
+  <button id="loadInventoryBtn">Mostrar inventario</button>
+
+  <h2 id="inventoryTitle"></h2>
+  <div id="inventoryItems"></div>
+
+  <script>
+    const userSelect = document.getElementById("userSelect");
+    const loadInventoryBtn = document.getElementById("loadInventoryBtn");
+    const inventoryTitle = document.getElementById("inventoryTitle");
+    const inventoryItems = document.getElementById("inventoryItems");
+
+    async function apiRequest(url) {
+      const response = await fetch(url);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "Error en la solicitud");
+      return data;
+    }
+
+    async function loadUsers() {
+      const users = await apiRequest("/api/users");
+      userSelect.innerHTML = "";
+
+      if (!users.length) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "No hay usuarios";
+        userSelect.appendChild(option);
+        return;
+      }
+
+      users.forEach((user) => {
+        const option = document.createElement("option");
+        option.value = String(user.id);
+        option.textContent = `${user.id} - ${user.username} (${user.email})`;
+        userSelect.appendChild(option);
+      });
+    }
+
+    function renderInventory(inventory) {
+      inventoryTitle.textContent = `Inventario de ${inventory.username} (user_id: ${inventory.user_id})`;
+      inventoryItems.innerHTML = "";
+
+      if (!inventory.weapons || !inventory.weapons.length) {
+        inventoryItems.textContent = "Este usuario no tiene skins guardadas en su inventario.";
+        return;
+      }
+
+      inventory.weapons.forEach((item) => {
+        const container = document.createElement("div");
+        container.style.marginBottom = "20px";
+
+        const title = document.createElement("p");
+        title.textContent =
+          `Weapon: ${item.name} | Skin: ${item.skin_name || "N/A"} | Cantidad: ${item.quantity}`;
+        container.appendChild(title);
+
+        if (item.skin_image) {
+          const img = document.createElement("img");
+          img.src = item.skin_image;
+          img.alt = item.skin_name || "Skin";
+          img.width = 240;
+          container.appendChild(img);
+        } else if (item.image) {
+          const img = document.createElement("img");
+          img.src = item.image;
+          img.alt = item.name || "Weapon";
+          img.width = 240;
+          container.appendChild(img);
+        }
+
+        inventoryItems.appendChild(container);
+      });
+    }
+
+    async function loadInventoryBySelectedUser() {
+      if (!userSelect.value) {
+        alert("No hay usuario seleccionado.");
+        return;
+      }
+
+      try {
+        const data = await apiRequest(`/api/inventories/user/${userSelect.value}`);
+        renderInventory(data);
+      } catch (error) {
+        inventoryTitle.textContent = "";
+        inventoryItems.textContent = error.message;
+      }
+    }
+
+    loadInventoryBtn.addEventListener("click", loadInventoryBySelectedUser);
+    userSelect.addEventListener("change", loadInventoryBySelectedUser);
+
+    (async function init() {
+      try {
+        await loadUsers();
+        if (userSelect.value) {
+          await loadInventoryBySelectedUser();
+        }
+      } catch (error) {
+        inventoryItems.textContent = error.message;
+      }
+    })();
+  </script>
+</body>
+</html>

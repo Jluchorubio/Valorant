@@ -3,6 +3,7 @@ const weaponsController = require("../controllers/weaponsController");
 
 const router = express.Router();
 
+router.get("/catalog", weaponsController.getPublicWeaponsCatalog);
 router.get("/", weaponsController.getAllWeapons);
 router.get("/:id", weaponsController.getWeaponById);
 router.post("/", weaponsController.createWeapon);

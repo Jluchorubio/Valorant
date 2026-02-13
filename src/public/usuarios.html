@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRUD Usuarios</title>
+</head>
+<body>
+  <h1>Usuarios</h1>
+
+  <h2>Indicadores</h2>
+  <div>
+    <strong>Roles disponibles:</strong>
+    <ul id="rolesList"></ul>
+  </div>
+  <div>
+    <label>Usuarios existentes (referencia de ID):
+      <select id="usersIndex"></select>
+    </label>
+  </div>
+
+  <hr />
+
+  <h2>Crear usuario</h2>
+  <form id="createUserForm">
+    <label>Username: <input type="text" id="create_username" required /></label><br />
+    <label>Email: <input type="email" id="create_email" required /></label><br />
+    <label>Password: <input type="text" id="create_password" required /></label><br />
+    <label>Role:
+      <select id="create_role_id" required></select>
+    </label><br />
+    <button type="submit">Crear</button>
+  </form>
+
+  <hr />
+
+  <h2>Editar usuario</h2>
+  <form id="updateUserForm">
+    <label>Usuario a editar:
+      <select id="update_user_picker"></select>
+    </label><br />
+    <label>ID Usuario: <input type="number" id="update_id" required min="1" /></label><br />
+    <label>Username: <input type="text" id="update_username" /></label><br />
+    <label>Email: <input type="email" id="update_email" /></label><br />
+    <label>Password: <input type="text" id="update_password" /></label><br />
+    <label>Role (opcional):
+      <select id="update_role_id"></select>
+    </label><br />
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <hr />
+
+  <h2>Eliminar usuario</h2>
+  <form id="deleteUserForm">
+    <label>Usuario a eliminar:
+      <select id="delete_user_picker"></select>
+    </label><br />
+    <label>ID Usuario: <input type="number" id="delete_id" required min="1" /></label><br />
+    <button type="submit">Eliminar</button>
+  </form>
+
+  <script>
+    const rolesList = document.getElementById("rolesList");
+    const usersIndex = document.getElementById("usersIndex");
+    const createRoleSelect = document.getElementById("create_role_id");
+    const updateRoleSelect = document.getElementById("update_role_id");
+    const updateUserPicker = document.getElementById("update_user_picker");
+    const deleteUserPicker = document.getElementById("delete_user_picker");
+    const updateIdInput = document.getElementById("update_id");
+    const deleteIdInput = document.getElementById("delete_id");
+
+    async function apiRequest(url, options = {}) {
+      const response = await fetch(url, {
+        headers: { "Content-Type": "application/json" },
+        ...options,
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "Error en la solicitud");
+      return data;
+    }
+
+    function buildUserOption(user) {
+      const option = document.createElement("option");
+      option.value = String(user.id);
+      option.textContent = `${user.id} - ${user.username} (${user.email})`;
+      return option;
+    }
+
+    async function loadRoles() {
+      const roles = await apiRequest("/api/roles");
+      rolesList.innerHTML = "";
+      createRoleSelect.innerHTML = "";
+      updateRoleSelect.innerHTML = "";
+
+      const emptyRole = document.createElement("option");
+      emptyRole.value = "";
+      emptyRole.textContent = "No cambiar role";
+      updateRoleSelect.appendChild(emptyRole);
+
+      roles.forEach((role) => {
+        const li = document.createElement("li");
+        li.textContent = `ID ${role.id}: ${role.name}`;
+        rolesList.appendChild(li);
+
+        const createOpt = document.createElement("option");
+        createOpt.value = String(role.id);
+        createOpt.textContent = `ID ${role.id}: ${role.name}`;
+        createRoleSelect.appendChild(createOpt);
+
+        const updateOpt = document.createElement("option");
+        updateOpt.value = String(role.id);
+        updateOpt.textContent = `ID ${role.id}: ${role.name}`;
+        updateRoleSelect.appendChild(updateOpt);
+      });
+    }
+
+    async function loadUsersIndex() {
+      const users = await apiRequest("/api/users");
+      usersIndex.innerHTML = "";
+      updateUserPicker.innerHTML = "";
+      deleteUserPicker.innerHTML = "";
+
+      users.forEach((user) => {
+        usersIndex.appendChild(buildUserOption(user));
+        updateUserPicker.appendChild(buildUserOption(user));
+        deleteUserPicker.appendChild(buildUserOption(user));
+      });
+
+      if (users.length) {
+        updateIdInput.value = users[0].id;
+        deleteIdInput.value = users[0].id;
+      } else {
+        updateIdInput.value = "";
+        deleteIdInput.value = "";
+      }
+    }
+
+    updateUserPicker.addEventListener("change", () => {
+      updateIdInput.value = updateUserPicker.value;
+    });
+
+    deleteUserPicker.addEventListener("change", () => {
+      deleteIdInput.value = deleteUserPicker.value;
+    });
+
+    document.getElementById("createUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        await apiRequest("/api/users", {
+          method: "POST",
+          body: JSON.stringify({
+            username: document.getElementById("create_username").value.trim(),
+            email: document.getElementById("create_email").value.trim(),
+            password: document.getElementById("create_password").value,
+            role_id: Number(createRoleSelect.value),
+          }),
+        });
+        event.target.reset();
+        await loadUsersIndex();
+        alert("Usuario creado.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("updateUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = Number(updateIdInput.value);
+      const payload = {};
+
+      const username = document.getElementById("update_username").value.trim();
+      const email = document.getElementById("update_email").value.trim();
+      const password = document.getElementById("update_password").value;
+      const roleIdRaw = updateRoleSelect.value;
+
+      if (username) payload.username = username;
+      if (email) payload.email = email;
+      if (password) payload.password = password;
+      if (roleIdRaw) payload.role_id = Number(roleIdRaw);
+
+      if (!Object.keys(payload).length) {
+        alert("Debes enviar al menos un campo para actualizar.");
+        return;
+      }
+
+      try {
+        await apiRequest(`/api/users/${id}`, {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+        event.target.reset();
+        await loadUsersIndex();
+        alert("Usuario actualizado.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById("deleteUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = Number(deleteIdInput.value);
+      try {
+        await apiRequest(`/api/users/${id}`, { method: "DELETE" });
+        event.target.reset();
+        await loadUsersIndex();
+        alert("Usuario eliminado.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    (async function init() {
+      try {
+        await loadRoles();
+        await loadUsersIndex();
+      } catch (error) {
+        alert(error.message);
+      }
+    })();
+  </script>
+</body>
+</html>

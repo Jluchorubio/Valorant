@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
+const rolesRoutes = require("./rolesRoutes");
 const usersRoutes = require("./usersRoutes");
 const weaponsRoutes = require("./weaponsRoutes");
+const skinsRoutes = require("./skinsRoutes");
 const inventoriesRoutes = require("./inventoriesRoutes");
 const adminRoutes = require("./adminRoutes");
 
@@ -11,8 +13,10 @@ router.get("/", (req, res) => {
   return res.sendFile(path.join(__dirname, "..", "public", "InicioSesion.html"));
 });
 
+router.use("/api/roles", rolesRoutes);
 router.use("/api/users", usersRoutes);
 router.use("/api/weapons", weaponsRoutes);
+router.use("/api/skins", skinsRoutes);
 router.use("/api/inventories", inventoriesRoutes);
 router.use("/api/admin", adminRoutes);
 
