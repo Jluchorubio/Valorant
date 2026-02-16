@@ -1,225 +1,223 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRUD Usuarios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/usuarios.css" />
+  <link rel="icon" type="" href="img/icono.png">
 </head>
 <body>
-  <h1>Usuarios</h1>
 
-  <h2>Indicadores</h2>
-  <div>
-    <strong>Roles disponibles:</strong>
-    <ul id="rolesList"></ul>
+  <!-- ========== NAVBAR RESPONSIVE ========== -->
+  <nav class="navbar">
+    <!-- left: logo + riot valorant -->
+    <div class="nav-left">
+      <div class="logo-riot">
+        <svg width="65" height="21" class="riot-logo-mobile" viewBox="0 0 587.93 165">
+          <path fill="#ffffff" d="M98.77.33 0 46.07l24.61 93.66 18.73-2.3-5.15-58.89 6.15-2.74L54.96 136l32.01-3.93-5.69-65 6.09-2.71 11.68 66.23 32.38-3.98-6.23-71.25 6.16-2.74 12.77 72.43 32.01-3.93V19.71L98.77.33zm2.32 142.05 1.63 9.22 73.42 12.24v-30.68l-75.01 9.22h-.04zm144.49-19.22v12.63h15.57a14.84 14.84 0 0 1-1.92 7.31 13 13 0 0 1-5.6 5.11 20 20 0 0 1-8.9 1.8 17.53 17.53 0 0 1-10-2.8 17.87 17.87 0 0 1-6.44-8.14 33.06 33.06 0 0 1-2.27-12.93 31.81 31.81 0 0 1 2.32-12.81 18.14 18.14 0 0 1 6.5-8 17.27 17.27 0 0 1 9.82-2.78 19.31 19.31 0 0 1 5.36.71 14.15 14.15 0 0 1 4.33 2.09 12.92 12.92 0 0 1 3.18 3.29 15.61 15.61 0 0 1 2 4.44h17.27a27.22 27.22 0 0 0-3.46-10.28 28.84 28.84 0 0 0-7.05-8.1 32.6 32.6 0 0 0-9.91-5.29 37.91 37.91 0 0 0-12.06-1.86 37.32 37.32 0 0 0-14 2.6 32.6 32.6 0 0 0-11.36 7.61 35 35 0 0 0-7.61 12.21 46.15 46.15 0 0 0-2.73 16.44q0 11.94 4.54 20.59a32.4 32.4 0 0 0 12.69 13.27 39.84 39.84 0 0 0 35.84.84 28.39 28.39 0 0 0 11.67-11q4.25-7.19 4.24-17.2v-9.76Zm215.03 40.81V88.53h51.67v13.96h-34.62v16.76h27.99v13.96h-27.99v16.8h34.7v13.96h-51.75zm101.83-53.3a9 9 0 0 0-3.54-6.64c-2.09-1.59-5-2.38-8.69-2.38a16.63 16.63 0 0 0-6.26 1 8.62 8.62 0 0 0-3.83 2.78 6.74 6.74 0 0 0-1.33 4 6.2 6.2 0 0 0 .79 3.29 7.27 7.27 0 0 0 2.4 2.45 16.54 16.54 0 0 0 3.7 1.79 40.14 40.14 0 0 0 4.64 1.31l6.63 1.54a47.19 47.19 0 0 1 9.45 3.08 27.46 27.46 0 0 1 7.2 4.68 18.84 18.84 0 0 1 4.58 6.39 20.37 20.37 0 0 1 1.61 8.29 20.65 20.65 0 0 1-3.54 12.11 22.56 22.56 0 0 1-10.15 7.85 41.31 41.31 0 0 1-15.93 2.76 42.69 42.69 0 0 1-16.17-2.81 23.22 23.22 0 0 1-10.72-8.48q-3.83-5.66-4-14.12h16.43a10.68 10.68 0 0 0 7.05 9.94 19.37 19.37 0 0 0 7.24 1.26 18.44 18.44 0 0 0 6.66-1.09 10 10 0 0 0 4.33-3 7.22 7.22 0 0 0 1.57-4.48 6.16 6.16 0 0 0-1.42-4 10.86 10.86 0 0 0-4.14-2.81 42.07 42.07 0 0 0-6.89-2.14l-8.07-1.95q-9.65-2.3-15.23-7.26t-5.54-13.44a19.86 19.86 0 0 1 3.72-12.12 24.74 24.74 0 0 1 10.33-8.11 36.74 36.74 0 0 1 15-2.91 35.62 35.62 0 0 1 14.92 2.91 23.43 23.43 0 0 1 9.91 8.14 21.54 21.54 0 0 1 3.6 12.12Zm-113.99 53.3h-16.87v-57.35l-1.73-.02-17.04 57.37h-16.86l-16.58-57.37-2.15.02v57.35h-16.87V88.53h28.67l14.48 50.56h1.75l14.48-50.56h28.72v75.44zm-114.66 0h18.27l-25.33-75.43h-23.15l-25.37 75.43h18.3l4.93-16.54h27.42Zm-28.43-29.7 8.22-27.65h3.1l8.26 27.65Zm278.58-37.76a4 4 0 0 1-3.67-2.44 4 4 0 0 1 0-3.1 4 4 0 0 1 .85-1.27 4.25 4.25 0 0 1 1.27-.86 4.15 4.15 0 0 1 3.1 0 4.13 4.13 0 0 1 1.27.86 4.08 4.08 0 0 1 .86 1.27 4 4 0 0 1 0 3.1 4.08 4.08 0 0 1-.86 1.27 4 4 0 0 1-1.27.86 4 4 0 0 1-1.55.31Zm0-1.09a2.84 2.84 0 0 0 1.47-.39 2.94 2.94 0 0 0 1.05-1 2.93 2.93 0 0 0 0-2.92 3 3 0 0 0-1.06-1 2.93 2.93 0 0 0-2.92 0 3 3 0 0 0-1 1 2.86 2.86 0 0 0 0 2.92 3 3 0 0 0 1 1 2.83 2.83 0 0 0 1.46.39Zm-1.46-1.15V90.6h1.78a1.52 1.52 0 0 1 .69.15 1.13 1.13 0 0 1 .47.42 1.24 1.24 0 0 1 .17.66 1.16 1.16 0 0 1-.18.66 1 1 0 0 1-.48.41 1.56 1.56 0 0 1-.7.14h-1.2v-.72h1a.52.52 0 0 0 .36-.12.5.5 0 0 0 .14-.37.47.47 0 0 0-.14-.37.52.52 0 0 0-.36-.12h-.55v2.93Zm2.39-1.68.82 1.68h-1.11l-.75-1.68ZM282.41 1.03h17.05v75.44h-17.05zm98.02 37.72q0 12.42-4.71 21a32.67 32.67 0 0 1-12.79 13.17 38.57 38.57 0 0 1-36.31 0 32.75 32.75 0 0 1-12.79-13.2q-4.71-8.66-4.71-21t4.71-21.05a32.67 32.67 0 0 1 12.75-13.14 38.65 38.65 0 0 1 36.31 0 32.67 32.67 0 0 1 12.79 13.17q4.71 8.64 4.71 21.05m-17.35 0a33.35 33.35 0 0 0-2.23-13 17.47 17.47 0 0 0-6.33-8 18.57 18.57 0 0 0-19.45 0 17.57 17.57 0 0 0-6.35 8 38.59 38.59 0 0 0 0 26 17.49 17.49 0 0 0 6.35 8 18.57 18.57 0 0 0 19.45 0 17.39 17.39 0 0 0 6.33-8 33.4 33.4 0 0 0 2.23-13M246.58 50.17l8.76 26.3h18.71l-9.74-28.33h-13.23l-.79-2.44c2.52-.49 6.83-1.25 10.65-3.85a20 20 0 0 0 8.75-16.39 24.15 24.15 0 0 0-3.26-12.75 21.9 21.9 0 0 0-9.36-8.64 32.56 32.56 0 0 0-14.64-3H212v75.4h17.06v-26.3Zm-.32-15.61a19.35 19.35 0 0 1-7.26 1.18h-9.94V14.88h9.91a18.68 18.68 0 0 1 7.25 1.24 9.12 9.12 0 0 1 4.4 3.7 10 10 0 0 1 1.5 5.64 9.65 9.65 0 0 1-1.48 5.55 8.86 8.86 0 0 1-4.38 3.55M382.04 1.03v14h29.3l.8 2.45c-2.48.48-6.67 1.22-10.43 3.7v55.31h16.87v-61.5h19.62v-14Z"></path>
+        </svg>
+        <span class="riot-logo-desktop">
+          <svg width="85" height="27" viewBox="0 0 587.93 165">
+            <path fill="#ffffff" d="M98.77.33 0 46.07l24.61 93.66 18.73-2.3-5.15-58.89 6.15-2.74L54.96 136l32.01-3.93-5.69-65 6.09-2.71 11.68 66.23 32.38-3.98-6.23-71.25 6.16-2.74 12.77 72.43 32.01-3.93V19.71L98.77.33zm2.32 142.05 1.63 9.22 73.42 12.24v-30.68l-75.01 9.22h-.04zm144.49-19.22v12.63h15.57a14.84 14.84 0 0 1-1.92 7.31 13 13 0 0 1-5.6 5.11 20 20 0 0 1-8.9 1.8 17.53 17.53 0 0 1-10-2.8 17.87 17.87 0 0 1-6.44-8.14 33.06 33.06 0 0 1-2.27-12.93 31.81 31.81 0 0 1 2.32-12.81 18.14 18.14 0 0 1 6.5-8 17.27 17.27 0 0 1 9.82-2.78 19.31 19.31 0 0 1 5.36.71 14.15 14.15 0 0 1 4.33 2.09 12.92 12.92 0 0 1 3.18 3.29 15.61 15.61 0 0 1 2 4.44h17.27a27.22 27.22 0 0 0-3.46-10.28 28.84 28.84 0 0 0-7.05-8.1 32.6 32.6 0 0 0-9.91-5.29 37.91 37.91 0 0 0-12.06-1.86 37.32 37.32 0 0 0-14 2.6 32.6 32.6 0 0 0-11.36 7.61 35 35 0 0 0-7.61 12.21 46.15 46.15 0 0 0-2.73 16.44q0 11.94 4.54 20.59a32.4 32.4 0 0 0 12.69 13.27 39.84 39.84 0 0 0 35.84.84 28.39 28.39 0 0 0 11.67-11q4.25-7.19 4.24-17.2v-9.76Zm215.03 40.81V88.53h51.67v13.96h-34.62v16.76h27.99v13.96h-27.99v16.8h34.7v13.96h-51.75zm101.83-53.3a9 9 0 0 0-3.54-6.64c-2.09-1.59-5-2.38-8.69-2.38a16.63 16.63 0 0 0-6.26 1 8.62 8.62 0 0 0-3.83 2.78 6.74 6.74 0 0 0-1.33 4 6.2 6.2 0 0 0 .79 3.29 7.27 7.27 0 0 0 2.4 2.45 16.54 16.54 0 0 0 3.7 1.79 40.14 40.14 0 0 0 4.64 1.31l6.63 1.54a47.19 47.19 0 0 1 9.45 3.08 27.46 27.46 0 0 1 7.2 4.68 18.84 18.84 0 0 1 4.58 6.39 20.37 20.37 0 0 1 1.61 8.29 20.65 20.65 0 0 1-3.54 12.11 22.56 22.56 0 0 1-10.15 7.85 41.31 41.31 0 0 1-15.93 2.76 42.69 42.69 0 0 1-16.17-2.81 23.22 23.22 0 0 1-10.72-8.48q-3.83-5.66-4-14.12h16.43a10.68 10.68 0 0 0 7.05 9.94 19.37 19.37 0 0 0 7.24 1.26 18.44 18.44 0 0 0 6.66-1.09 10 10 0 0 0 4.33-3 7.22 7.22 0 0 0 1.57-4.48 6.16 6.16 0 0 0-1.42-4 10.86 10.86 0 0 0-4.14-2.81 42.07 42.07 0 0 0-6.89-2.14l-8.07-1.95q-9.65-2.3-15.23-7.26t-5.54-13.44a19.86 19.86 0 0 1 3.72-12.12 24.74 24.74 0 0 1 10.33-8.11 36.74 36.74 0 0 1 15-2.91 35.62 35.62 0 0 1 14.92 2.91 23.43 23.43 0 0 1 9.91 8.14 21.54 21.54 0 0 1 3.6 12.12Zm-113.99 53.3h-16.87v-57.35l-1.73-.02-17.04 57.37h-16.86l-16.58-57.37-2.15.02v57.35h-16.87V88.53h28.67l14.48 50.56h1.75l14.48-50.56h28.72v75.44zm-114.66 0h18.27l-25.33-75.43h-23.15l-25.37 75.43h18.3l4.93-16.54h27.42Zm-28.43-29.7 8.22-27.65h3.1l8.26 27.65Zm278.58-37.76a4 4 0 0 1-3.67-2.44 4 4 0 0 1 0-3.1 4 4 0 0 1 .85-1.27 4.25 4.25 0 0 1 1.27-.86 4.15 4.15 0 0 1 3.1 0 4.13 4.13 0 0 1 1.27.86 4.08 4.08 0 0 1 .86 1.27 4 4 0 0 1 0 3.1 4.08 4.08 0 0 1-.86 1.27 4 4 0 0 1-1.27.86 4 4 0 0 1-1.55.31Zm0-1.09a2.84 2.84 0 0 0 1.47-.39 2.94 2.94 0 0 0 1.05-1 2.93 2.93 0 0 0 0-2.92 3 3 0 0 0-1.06-1 2.93 2.93 0 0 0-2.92 0 3 3 0 0 0-1 1 2.86 2.86 0 0 0 0 2.92 3 3 0 0 0 1 1 2.83 2.83 0 0 0 1.46.39Zm-1.46-1.15V90.6h1.78a1.52 1.52 0 0 1 .69.15 1.13 1.13 0 0 1 .47.42 1.24 1.24 0 0 1 .17.66 1.16 1.16 0 0 1-.18.66 1 1 0 0 1-.48.41 1.56 1.56 0 0 1-.7.14h-1.2v-.72h1a.52.52 0 0 0 .36-.12.5.5 0 0 0 .14-.37.47.47 0 0 0-.14-.37.52.52 0 0 0-.36-.12h-.55v2.93Zm2.39-1.68.82 1.68h-1.11l-.75-1.68ZM282.41 1.03h17.05v75.44h-17.05zm98.02 37.72q0 12.42-4.71 21a32.67 32.67 0 0 1-12.79 13.17 38.57 38.57 0 0 1-36.31 0 32.75 32.75 0 0 1-12.79-13.2q-4.71-8.66-4.71-21t4.71-21.05a32.67 32.67 0 0 1 12.75-13.14 38.65 38.65 0 0 1 36.31 0 32.67 32.67 0 0 1 12.79 13.17q4.71 8.64 4.71 21.05m-17.35 0a33.35 33.35 0 0 0-2.23-13 17.47 17.47 0 0 0-6.33-8 18.57 18.57 0 0 0-19.45 0 17.57 17.57 0 0 0-6.35 8 38.59 38.59 0 0 0 0 26 17.49 17.49 0 0 0 6.35 8 18.57 18.57 0 0 0 19.45 0 17.39 17.39 0 0 0 6.33-8 33.4 33.4 0 0 0 2.23-13M246.58 50.17l8.76 26.3h18.71l-9.74-28.33h-13.23l-.79-2.44c2.52-.49 6.83-1.25 10.65-3.85a20 20 0 0 0 8.75-16.39 24.15 24.15 0 0 0-3.26-12.75 21.9 21.9 0 0 0-9.36-8.64 32.56 32.56 0 0 0-14.64-3H212v75.4h17.06v-26.3Zm-.32-15.61a19.35 19.35 0 0 1-7.26 1.18h-9.94V14.88h9.91a18.68 18.68 0 0 1 7.25 1.24 9.12 9.12 0 0 1 4.4 3.7 10 10 0 0 1 1.5 5.64 9.65 9.65 0 0 1-1.48 5.55 8.86 8.86 0 0 1-4.38 3.55M382.04 1.03v14h29.3l.8 2.45c-2.48.48-6.67 1.22-10.43 3.7v55.31h16.87v-61.5h19.62v-14Z"></path>
+          </svg>
+        </span>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="logo-valorant">
+        <svg width="40" height="28" class="valorant-logo-mobile" viewBox="0 0 587.93 165">
+          <path fill="#ffffff" d="M99.25 48.66V10.28c0-.59-.75-.86-1.12-.39l-41.92 52.4a.627.627 0 00.49 1.02h30.29c.82 0 1.59-.37 2.1-1.01l9.57-11.96c.38-.48.59-1.07.59-1.68zM1.17 50.34L32.66 89.7c.51.64 1.28 1.01 2.1 1.01h30.29c.53 0 .82-.61.49-1.02L1.7 9.89c-.37-.46-1.12-.2-1.12.39v38.38c0 .61.21 1.2.59 1.68z"></path>
+        </svg>
+        <span class="valorant-logo-desktop">
+          <svg width="50" height="35" viewBox="0 0 587.93 165">
+            <path fill="#ffffff" d="M99.25 48.66V10.28c0-.59-.75-.86-1.12-.39l-41.92 52.4a.627.627 0 00.49 1.02h30.29c.82 0 1.59-.37 2.1-1.01l9.57-11.96c.38-.48.59-1.07.59-1.68zM1.17 50.34L32.66 89.7c.51.64 1.28 1.01 2.1 1.01h30.29c.53 0 .82-.61.49-1.02L1.7 9.89c-.37-.46-1.12-.2-1.12.39v38.38c0 .61.21 1.2.59 1.68z"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- menu hamburguesa para móvil -->
+    <div class="hamburger-menu">
+      <button id="menu-toggle" class="hamburger-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- menu links (escritorio) -->
+    <div class="nav-links">
+      <span class="nav-link"><a href="index.html">Inicio</a></span>
+      <span class="nav-link"><a href="agentes.html">Agentes</a></span>
+      <span class="nav-link"><a href="mapas.html">Mapas</a></span>
+      <span class="nav-link"><a href="usuarios.html">Usuarios</a></span>
+      <span class="nav-link"><a href="skins.html">Skins</a></span>
+    </div>
+
+    <!-- right: play button + icons (escritorio) -->
+    <div class="nav-right">
+      <span class="btn-red">Juega ahora</span>
+      <span class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z" />
+        </svg>
+      </span>
+      <span class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+          <g fill="none" stroke="#fff" stroke-width="3">
+            <path stroke-linejoin="round" d="M3 24a21 21 0 1 0 42 0a21 21 0 1 0-42 0" />
+            <path stroke-linejoin="round" d="M15 24a9 21 0 1 1 18 0a9 21 0 1 1-18 0" />
+            <path stroke-linecap="round" d="M4.5 31h39m-39-14h39" />
+          </g>
+        </svg>
+      </span>
+      <span class="avatar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+          <path fill="#fff" fill-rule="evenodd" d="M18.842 10.16a5.16 5.16 0 1 1 10.318 0a5.16 5.16 0 0 1-10.318 0M24.002 1a9.16 9.16 0 0 0-9.16 9.16c0 2.045.67 3.933 1.804 5.458a6.29 6.29 0 0 0-5.598 7.049c.948 7.809 2.94 14.174 4.454 18.16C16.83 44.323 20 47 24.001 47c4 0 7.17-2.677 8.497-6.172c1.514-3.987 3.506-10.352 4.455-18.161a6.29 6.29 0 0 0-5.596-7.049a9.1 9.1 0 0 0 1.803-5.459C33.16 5.101 29.06 1 24.001 1m-6.878 18.59A90 90 0 0 1 24 19.319c2.612 0 4.993.126 6.876.273c1.315.102 2.268 1.251 2.105 2.593c-.9 7.414-2.793 13.459-4.223 17.224C27.918 41.622 26.066 43 24 43c-2.067 0-3.919-1.379-4.76-3.593c-1.43-3.765-3.322-9.81-4.222-17.223c-.163-1.341.79-2.491 2.105-2.593" clip-rule="evenodd" />
+        </svg>
+      </span>
+    </div>
+  </nav>
+
+  <!-- menú móvil desplegable (oculto por defecto) -->
+  <div id="mobile-menu" class="mobile-menu hidden">
+    <div class="mobile-menu-content">
+      <a href="index.html" class="mobile-link">Inicio</a>
+      <a href="agentes.html" class="mobile-link">Agentes</a>
+      <a href="mapas.html" class="mobile-link">Mapas</a>
+      <a href="usuarios.html" class="mobile-link">Usuarios</a>
+      <a href="skins.html" class="mobile-link">Skins</a>
+      <div class="mobile-footer">
+        <span class="btn-red mobile-btn">Juega ahora</span>
+        <div class="mobile-icons">
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+              <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z" />
+            </svg>
+          </span>
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+              <g fill="none" stroke="#fff" stroke-width="3">
+                <path stroke-linejoin="round" d="M3 24a21 21 0 1 0 42 0a21 21 0 1 0-42 0" />
+                <path stroke-linejoin="round" d="M15 24a9 21 0 1 1 18 0a9 21 0 1 1-18 0" />
+                <path stroke-linecap="round" d="M4.5 31h39m-39-14h39" />
+              </g>
+            </svg>
+          </span>
+          <span class="avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+              <path fill="#fff" fill-rule="evenodd" d="M18.842 10.16a5.16 5.16 0 1 1 10.318 0a5.16 5.16 0 0 1-10.318 0M24.002 1a9.16 9.16 0 0 0-9.16 9.16c0 2.045.67 3.933 1.804 5.458a6.29 6.29 0 0 0-5.598 7.049c.948 7.809 2.94 14.174 4.454 18.16C16.83 44.323 20 47 24.001 47c4 0 7.17-2.677 8.497-6.172c1.514-3.987 3.506-10.352 4.455-18.161a6.29 6.29 0 0 0-5.596-7.049a9.1 9.1 0 0 0 1.803-5.459C33.16 5.101 29.06 1 24.001 1m-6.878 18.59A90 90 0 0 1 24 19.319c2.612 0 4.993.126 6.876.273c1.315.102 2.268 1.251 2.105 2.593c-.9 7.414-2.793 13.459-4.223 17.224C27.918 41.622 26.066 43 24 43c-2.067 0-3.919-1.379-4.76-3.593c-1.43-3.765-3.322-9.81-4.222-17.223c-.163-1.341.79-2.491 2.105-2.593" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <label>Usuarios existentes (referencia de ID):
-      <select id="usersIndex"></select>
-    </label>
-  </div>
 
-  <hr />
+  <!--main-->
+  <main class="users-app">
+    <section class="hero-panel">
+      <p class="hero-kicker">Módulo de Administración de Usuarios</p>
+      <h1>CRUD USUARIOS</h1>
+      <p class="hero-description">
+        Gestiona usuarios, roles y cambios de acceso con un panel visual .
+      </p>
+    </section>
 
-  <h2>Crear usuario</h2>
-  <form id="createUserForm">
-    <label>Username: <input type="text" id="create_username" required /></label><br />
-    <label>Email: <input type="email" id="create_email" required /></label><br />
-    <label>Password: <input type="text" id="create_password" required /></label><br />
-    <label>Role:
-      <select id="create_role_id" required></select>
-    </label><br />
-    <button type="submit">Crear</button>
-  </form>
+    <section class="panel-grid top-grid">
+      <article class="panel panel-indicators">
+        <h2>Indicadores</h2>
+        <div class="indicator-block">
+          <h3>Roles disponibles</h3>
+          <ul id="rolesList" class="roles-list"></ul>
+        </div>
 
-  <hr />
+        <label>Usuarios existentes (referencia de ID):
+          <select id="usersIndex"></select>
+        </label>
+      </article>
 
-  <h2>Editar usuario</h2>
-  <form id="updateUserForm">
-    <label>Usuario a editar:
-      <select id="update_user_picker"></select>
-    </label><br />
-    <label>ID Usuario: <input type="number" id="update_id" required min="1" /></label><br />
-    <label>Username: <input type="text" id="update_username" /></label><br />
-    <label>Email: <input type="email" id="update_email" /></label><br />
-    <label>Password: <input type="text" id="update_password" /></label><br />
-    <label>Role (opcional):
-      <select id="update_role_id"></select>
-    </label><br />
-    <button type="submit">Actualizar</button>
-  </form>
+      <article class="panel">
+        <h2>Crear Usuario</h2>
+        <form id="createUserForm" class="form-layout">
+          <label>Username:
+            <input type="text" id="create_username" required />
+          </label>
+          <label>Email:
+            <input type="email" id="create_email" required />
+          </label>
+          <label>Password:
+            <input type="text" id="create_password" required />
+          </label>
+          <label>Role:
+            <select id="create_role_id" required></select>
+          </label>
+          <button type="submit">Crear</button>
+        </form>
+      </article>
+    </section>
 
-  <hr />
+    <section class="panel-grid action-grid">
+      <article class="panel">
+        <h2>Editar Usuario</h2>
+        <form id="updateUserForm" class="form-layout">
+          <div class="inline-field compact">
+            <label>Usuario a editar:
+              <select id="update_user_picker"></select>
+            </label>
+            <label>ID Usuario:
+              <input type="number" id="update_id" required min="1" />
+            </label>
+          </div>
 
-  <h2>Eliminar usuario</h2>
-  <form id="deleteUserForm">
-    <label>Usuario a eliminar:
-      <select id="delete_user_picker"></select>
-    </label><br />
-    <label>ID Usuario: <input type="number" id="delete_id" required min="1" /></label><br />
-    <button type="submit">Eliminar</button>
-  </form>
+          <label>Username:
+            <input type="text" id="update_username" />
+          </label>
+          <label>Email:
+            <input type="email" id="update_email" />
+          </label>
+          <label>Password:
+            <input type="text" id="update_password" />
+          </label>
+          <label>Role (opcional):
+            <select id="update_role_id"></select>
+          </label>
 
-  <script>
-    const rolesList = document.getElementById("rolesList");
-    const usersIndex = document.getElementById("usersIndex");
-    const createRoleSelect = document.getElementById("create_role_id");
-    const updateRoleSelect = document.getElementById("update_role_id");
-    const updateUserPicker = document.getElementById("update_user_picker");
-    const deleteUserPicker = document.getElementById("delete_user_picker");
-    const updateIdInput = document.getElementById("update_id");
-    const deleteIdInput = document.getElementById("delete_id");
+          <button type="submit" class="steel-action">Actualizar</button>
+        </form>
+      </article>
 
-    async function apiRequest(url, options = {}) {
-      const response = await fetch(url, {
-        headers: { "Content-Type": "application/json" },
-        ...options,
-      });
+      <article class="panel">
+        <h2>Eliminar Usuario</h2>
+        <form id="deleteUserForm" class="form-layout">
+          <label>Usuario a eliminar:
+            <select id="delete_user_picker"></select>
+          </label>
+          <label>ID Usuario:
+            <input type="number" id="delete_id" required min="1" />
+          </label>
+          <button type="submit" class="danger-action">Eliminar</button>
+        </form>
+      </article>
+    </section>
 
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.message || "Error en la solicitud");
-      return data;
-    }
+    <section class="panel users-list-panel">
+      <div class="users-header">
+        <h2>Usuarios Registrados</h2>
+        <button id="refreshUsers" type="button">Recargar</button>
+      </div>
+      <div id="usersCards" class="users-card-grid" aria-live="polite"></div>
+    </section>
+  </main>
 
-    function buildUserOption(user) {
-      const option = document.createElement("option");
-      option.value = String(user.id);
-      option.textContent = `${user.id} - ${user.username} (${user.email})`;
-      return option;
-    }
-
-    async function loadRoles() {
-      const roles = await apiRequest("/api/roles");
-      rolesList.innerHTML = "";
-      createRoleSelect.innerHTML = "";
-      updateRoleSelect.innerHTML = "";
-
-      const emptyRole = document.createElement("option");
-      emptyRole.value = "";
-      emptyRole.textContent = "No cambiar role";
-      updateRoleSelect.appendChild(emptyRole);
-
-      roles.forEach((role) => {
-        const li = document.createElement("li");
-        li.textContent = `ID ${role.id}: ${role.name}`;
-        rolesList.appendChild(li);
-
-        const createOpt = document.createElement("option");
-        createOpt.value = String(role.id);
-        createOpt.textContent = `ID ${role.id}: ${role.name}`;
-        createRoleSelect.appendChild(createOpt);
-
-        const updateOpt = document.createElement("option");
-        updateOpt.value = String(role.id);
-        updateOpt.textContent = `ID ${role.id}: ${role.name}`;
-        updateRoleSelect.appendChild(updateOpt);
-      });
-    }
-
-    async function loadUsersIndex() {
-      const users = await apiRequest("/api/users");
-      usersIndex.innerHTML = "";
-      updateUserPicker.innerHTML = "";
-      deleteUserPicker.innerHTML = "";
-
-      users.forEach((user) => {
-        usersIndex.appendChild(buildUserOption(user));
-        updateUserPicker.appendChild(buildUserOption(user));
-        deleteUserPicker.appendChild(buildUserOption(user));
-      });
-
-      if (users.length) {
-        updateIdInput.value = users[0].id;
-        deleteIdInput.value = users[0].id;
-      } else {
-        updateIdInput.value = "";
-        deleteIdInput.value = "";
-      }
-    }
-
-    updateUserPicker.addEventListener("change", () => {
-      updateIdInput.value = updateUserPicker.value;
-    });
-
-    deleteUserPicker.addEventListener("change", () => {
-      deleteIdInput.value = deleteUserPicker.value;
-    });
-
-    document.getElementById("createUserForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      try {
-        await apiRequest("/api/users", {
-          method: "POST",
-          body: JSON.stringify({
-            username: document.getElementById("create_username").value.trim(),
-            email: document.getElementById("create_email").value.trim(),
-            password: document.getElementById("create_password").value,
-            role_id: Number(createRoleSelect.value),
-          }),
-        });
-        event.target.reset();
-        await loadUsersIndex();
-        alert("Usuario creado.");
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    document.getElementById("updateUserForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const id = Number(updateIdInput.value);
-      const payload = {};
-
-      const username = document.getElementById("update_username").value.trim();
-      const email = document.getElementById("update_email").value.trim();
-      const password = document.getElementById("update_password").value;
-      const roleIdRaw = updateRoleSelect.value;
-
-      if (username) payload.username = username;
-      if (email) payload.email = email;
-      if (password) payload.password = password;
-      if (roleIdRaw) payload.role_id = Number(roleIdRaw);
-
-      if (!Object.keys(payload).length) {
-        alert("Debes enviar al menos un campo para actualizar.");
-        return;
-      }
-
-      try {
-        await apiRequest(`/api/users/${id}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
-        });
-        event.target.reset();
-        await loadUsersIndex();
-        alert("Usuario actualizado.");
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    document.getElementById("deleteUserForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const id = Number(deleteIdInput.value);
-      try {
-        await apiRequest(`/api/users/${id}`, { method: "DELETE" });
-        event.target.reset();
-        await loadUsersIndex();
-        alert("Usuario eliminado.");
-      } catch (error) {
-        alert(error.message);
-      }
-    });
-
-    (async function init() {
-      try {
-        await loadRoles();
-        await loadUsersIndex();
-      } catch (error) {
-        alert(error.message);
-      }
-    })();
-  </script>
+<script src="js/usuarios.js"></script>
 </body>
 </html>
