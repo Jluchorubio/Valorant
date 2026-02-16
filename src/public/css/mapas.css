@@ -1,0 +1,149 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0c;
+            font-family: 'Inter', 'Montserrat', system-ui, sans-serif;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* ===== DIAGONALES (reutilizadas) ===== */
+        .diagonal-hero {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .diagonal-section {
+            clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+            margin-top: -4px;
+            margin-bottom: -4px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(255, 70, 85, 0.15) 100%);
+            mix-blend-mode: multiply;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* ===== ANIMACIONES ===== */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.9s forwards;
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            animation: fadeUp 0.9s forwards;
+            animation-timeline: view();
+            animation-range: entry 0% entry 70%;
+        }
+
+        @supports not (animation-timeline: view()) {
+            .scroll-reveal {
+                opacity: 1;
+            }
+        }
+
+        /* ===== TARJETA MAPA ===== */
+        .map-card {
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.4s;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background: #111216;
+            border: 1px solid rgba(255, 70, 85, 0.1);
+        }
+
+        .map-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 30px -10px #ff4655;
+        }
+
+        .map-card img {
+            transition: transform 0.6s ease;
+        }
+
+        .map-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .map-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(255, 70, 85, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .map-card:hover .map-overlay {
+            opacity: 0.6;
+        }
+
+        .btn-red {
+            background: #ff4655;
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-red:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 10px 20px -5px #ff4655;
+        }
+
+        .nav-link {
+            cursor: pointer;
+            transition: color 0.1s;
+        }
+
+        .nav-link:hover {
+            color: #ff4655;
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #ff4655;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 70, 85, 0.7);
+        }

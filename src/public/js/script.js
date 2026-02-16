@@ -10,11 +10,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const mapsRes = await fetch("https://valorant-api.com/v1/maps");
         const mapsData = await mapsRes.json();
         const maps = mapsData.data.filter(m => m.splash);
-
+        
         // ===============================
-        // LATEST ARTICLES (usar displayIcon)
+        // HERO SECTION (background agent)
         // ===============================
+        const heroPlaceholder = document.querySelector(".diagonal-hero .img-placeholder");
 
+        if (heroPlaceholder && agents.length > 0) {
+            const randomAgent = agents[Math.floor(Math.random() * agents.length)];
+            heroPlaceholder.style.background = `url(${randomAgent.background}) center/cover no-repeat`;
+        }
+        
         // ===============================
         // ISO SECTION (big left image)
         // ===============================
@@ -57,3 +63,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
+    // Script para el menú hamburguesa
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    });

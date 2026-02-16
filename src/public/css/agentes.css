@@ -186,3 +186,47 @@ body {
 .text-glow {
     text-shadow: 0 0 15px rgba(255, 70, 85, 0.7);
 }
+
+/* ===== CONTENEDOR DE HABILIDADES CON SCROLL ===== */
+.abilities-container {
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #ff4655 #2a2a35;
+}
+
+.abilities-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.abilities-container::-webkit-scrollbar-track {
+    background: #2a2a35;
+    border-radius: 4px;
+}
+
+.abilities-container::-webkit-scrollbar-thumb {
+    background: #ff4655;
+    border-radius: 4px;
+}
+
+.abilities-container::-webkit-scrollbar-thumb:hover {
+    background: #ff2c3b;
+}
+
+/* Ajuste para el dropdown */
+.ability-dropdown.open {
+    max-height: 800px;
+}
+
+/* Mejora para las habilidades */
+.ability-dropdown {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+}
+
+.ability-dropdown.open {
+    opacity: 1;
+}
