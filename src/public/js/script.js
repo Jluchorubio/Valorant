@@ -12,33 +12,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         const maps = mapsData.data.filter(m => m.splash);
 
         // ===============================
-        // HERO SECTION (background agent)
-        // ===============================
-        const heroPlaceholder = document.querySelector(".diagonal-hero .img-placeholder");
-
-        if (heroPlaceholder && agents.length > 0) {
-            const randomAgent = agents[Math.floor(Math.random() * agents.length)];
-            heroPlaceholder.style.background = `url(${randomAgent.background}) center/cover no-repeat`;
-        }
-
-        // ===============================
         // LATEST ARTICLES (usar displayIcon)
         // ===============================
-        const articlePlaceholders = document.querySelectorAll(".article-card .img-placeholder");
-
-        articlePlaceholders.forEach((placeholder, index) => {
-            const agent = agents[index % agents.length];
-            placeholder.style.background = `url(${agent.displayIcon}) center/contain no-repeat`;
-            placeholder.style.backgroundColor = "#0b0b0f";
-        });
 
         // ===============================
         // ISO SECTION (big left image)
         // ===============================
         const isoImage = document.querySelector(".diagonal-iso .img-placeholder");
 
-        if (isoImage && agents.length > 1) {
-            isoImage.style.background = `url(${agents[1].fullPortrait}) center/cover no-repeat`;
+        if (isoImage && agents.length > 0) {
+
+            // Buscar el agente llamado "Iso"
+            const isoAgent = agents.find(agent => agent.displayName === "Iso");
+
+            if (isoAgent && isoAgent.fullPortrait) {
+                isoImage.style.background = `url(${isoAgent.fullPortrait}) center/cover no-repeat`;
+            }
         }
 
         // ===============================
